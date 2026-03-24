@@ -22,9 +22,9 @@ export default function App() {
           transition={{ duration: 0.8 }}
           className="w-full aspect-square max-w-[280px] md:max-w-[320px] shadow-2xl overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-950 flex items-center justify-center relative group"
         >
-          <img 
-            src="/codigos-do-rei/logo.png" 
-            alt="Códigos do Rei Logo" 
+          <img
+            src="/logo.png"
+            alt="Códigos do Rei Logo"
             className="w-full h-full object-contain opacity-90 transition-opacity duration-500 relative z-10 p-4"
             referrerPolicy="no-referrer"
           />
@@ -49,7 +49,7 @@ export default function App() {
             transition={{ delay: 0.4 }}
             className="text-zinc-500 text-base md:text-lg leading-relaxed px-4 mt-2"
           >
-            O novo site do <span className="text-white font-semibold">Códigos do Rei</span> está em desenvolvimento. 
+            O novo site do <span className="text-white font-semibold">Códigos do Rei</span> está em desenvolvimento.
             Prepare-se para o novo.
           </motion.p>
         </div>
@@ -61,19 +61,19 @@ export default function App() {
           transition={{ delay: 0.6 }}
           className="flex flex-col sm:flex-row gap-4 w-full px-4"
         >
-          <a 
-            href="https://instagram.com/codigosdorei" 
-            target="_blank" 
+          <a
+            href="https://instagram.com/codigosdorei"
+            target="_blank"
             rel="noopener noreferrer"
             className="flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 hover:border-zinc-700 transition-all group"
           >
             <Instagram size={20} className="text-zinc-500 group-hover:text-white transition-colors" />
             <span className="text-sm font-bold text-zinc-400 group-hover:text-white transition-colors">Instagram</span>
           </a>
-          
-          <a 
-            href="https://bio.site/codigosdorei" 
-            target="_blank" 
+
+          <a
+            href="https://bio.site/codigosdorei"
+            target="_blank"
             rel="noopener noreferrer"
             className="flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 hover:border-zinc-700 transition-all group"
           >
