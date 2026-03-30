@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://codigosdorei.com.br/sitemap.xml
