@@ -57,18 +57,32 @@ export const CONTENT = {
     "Organização de eventos culturais",
     "Reuniões semanais e quinzenais"
   ],
+  magazines: [
+    {
+      title: "Cultura Cristã - Edição 03",
+      edition: "03",
+      description: "Nossa edição mais recente, focada na expansão da cultura cristã e no impacto social através da educação.",
+      image: "/imagem-revista.png",
+      pdfUrl: "/revista-edicao-03.pdf",
+      date: "16 de Janeiro de 2026"
+    }
+  ],
   audience: "Famílias e pessoas que valorizam fé, princípios e o desenvolvimento da cultura cristã.",
   donations: {
-    pixCora: "2196594-3516",
-    pixPagBank: "doar@codigosdorei.com.br",
-    link: "https://bio.site/codigosdorei",
-    suggestions: [30, 50, 100]
+    suggestions: [
+      { value: 30, link: "https://pag.ae/81uRfwuX3" },
+      { value: 50, link: "https://pag.ae/7_Ssd-fX9" },
+      { value: 100, link: "https://pag.ae/7_SsenhEo" }
+    ]
   },
   partners: [
     "APV Offshore",
     "QR Contabilidade",
     "Pie Dance",
-    "Rhema Colubande"
+    "Rhema Colubande",
+    "Açaí da tia Tati",
+    "RD CAR - Martelinho e Estética Automotiva",
+    "Rocha Ar Condicionado"
   ],
   contact: {
     whatsapp: "(21) 96594-3516",

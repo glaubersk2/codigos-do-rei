@@ -18,7 +18,8 @@ import {
   Target,
   History,
   CheckCircle2,
-  Brain
+  Brain,
+  Download
 } from 'lucide-react';
 import { CONTENT } from './constants';
 
@@ -35,76 +36,129 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Início', href: '#home' },
     { name: 'Sobre', href: '#sobre' },
+    { name: 'Revistas', href: '#revistas' },
     { name: 'Projetos', href: '#projetos' },
     { name: 'Doações', href: '#doacoes' },
   ];
 
+  const scrollToTarget = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setIsMobileMenuOpen(false);
+    
+    // Check if it's pointing to the top
+    if (href === '#home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.history.pushState(null, '', href);
+      return;
+    }
+
+    const targetId = href.replace('#', '');
+    const elem = document.getElementById(targetId);
+    if (elem) {
+      elem.scrollIntoView({ behavior: 'smooth' });
+      window.history.pushState(null, '', href);
+    }
+  };
+
+  const handleMobileNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setIsMobileMenuOpen(false);
+    
+    // Wait for the menu's closing animation to begin so layout changes don't cancel the scroll
+    setTimeout(() => {
+      if (href === '#home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const targetId = href.replace('#', '');
+        const elem = document.getElementById(targetId);
+        if (elem) {
+          elem.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+      window.history.pushState(null, '', href);
+    }, 150);
+  };
+
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-6'}`}>
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <a href="#home" className="flex items-center gap-3 group">
-          <div className="w-12 h-12 relative flex items-center justify-center">
-            <img src="/logo.jpeg" alt="Códigos do Rei" className="w-full h-full object-contain group-hover:scale-110 transition-transform" />
-            <div className="absolute inset-0 bg-brand-gradient opacity-0 group-hover:opacity-10 transition-opacity rounded-full" />
+    <nav 
+      className={`fixed top-0 left-0 right-0 z-[999] w-full transition-all duration-300 ${
+        isScrolled 
+          ? 'bg-white shadow-lg py-2 translate-y-0' 
+          : 'bg-white/90 backdrop-blur-md py-4 translate-y-0'
+      }`}
+      style={{ position: 'fixed', top: 0, left: 0, right: 0 }}
+    >
+      <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
+        <a href="#home" onClick={(e) => scrollToTarget(e, '#home')} className="flex items-center gap-2 group">
+          <div className="w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
+            <img src="/logo.jpeg" alt="Logo" className="w-full h-full object-contain" />
           </div>
           <div className="flex flex-col">
-            <span className="font-black text-xl tracking-tighter leading-none">CÓDIGOS</span>
-            <span className="font-bold text-[10px] tracking-[0.3em] text-zinc-400">DO REI</span>
+            <span className="font-black text-base md:text-xl tracking-tighter leading-none">CÓDIGOS</span>
+            <span className="font-bold text-[8px] md:text-[10px] tracking-[0.3em] text-zinc-400">DO REI</span>
           </div>
         </a>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6 lg:gap-8">
           {navLinks.map((link) => (
             <a 
               key={link.name} 
               href={link.href} 
-              className="text-[11px] font-bold uppercase tracking-[0.2em] hover:text-brand-primary transition-colors"
+              onClick={(e) => scrollToTarget(e, link.href)}
+              className="text-[10px] lg:text-[11px] font-black uppercase tracking-[0.2em] hover:text-brand-primary transition-colors text-zinc-800 py-2"
             >
               {link.name}
             </a>
           ))}
           <a 
             href="#doacoes" 
-            className="bg-black text-white px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-primary transition-all shadow-lg shadow-black/5"
+            onClick={(e) => scrollToTarget(e, '#doacoes')}
+            className="bg-black text-white px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-primary transition-all rounded-sm"
           >
             Apoie Agora
           </a>
         </div>
 
-        {/* Mobile Toggle */}
-        <button className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          {isMobileMenuOpen ? <X /> : <Menu />}
-        </button>
+        {/* Mobile Actions */}
+        <div className="flex md:hidden items-center gap-3">
+          <a 
+            href="#doacoes" 
+            onClick={(e) => scrollToTarget(e, '#doacoes')}
+            className="bg-brand-primary text-white px-4 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] rounded-sm whitespace-nowrap shadow-md shadow-brand-primary/20"
+          >
+            Doar
+          </a>
+          <button 
+            className="p-1 text-zinc-900" 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle Menu"
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 bg-white border-t p-6 md:hidden shadow-xl"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="absolute top-full left-0 right-0 z-[1000] md:hidden bg-white border-t border-zinc-100 shadow-2xl overflow-hidden"
           >
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col p-4 divide-y divide-zinc-50">
               {navLinks.map((link) => (
                 <a 
                   key={link.name} 
                   href={link.href} 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg font-medium py-2 border-b border-zinc-100"
+                  onClick={(e) => handleMobileNavClick(e, link.href)}
+                  className="text-xs font-black uppercase tracking-[0.2em] py-6 text-zinc-900 active:bg-zinc-50 transition-colors flex items-center px-4"
                 >
                   {link.name}
                 </a>
               ))}
-              <a 
-                href="#doacoes" 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="bg-black text-white text-center py-4 font-bold uppercase tracking-widest mt-4"
-              >
-                Apoie Agora
-              </a>
             </div>
           </motion.div>
         )}
@@ -112,6 +166,7 @@ const Navbar = () => {
     </nav>
   );
 };
+
 
 interface ProjectCardProps {
   project: any;
@@ -121,31 +176,31 @@ interface ProjectCardProps {
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
       className="relative group cursor-pointer"
     >
-      <div className="aspect-[4/5] overflow-hidden relative">
+      <div className="aspect-[3/2] overflow-hidden relative rounded-sm shadow-sm border border-zinc-100">
         <img 
           src={project.image} 
           alt={project.title} 
           className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
           referrerPolicy="no-referrer"
         />
-        <div className={`absolute top-4 right-4 w-12 h-12 ${project.color} opacity-80 mix-blend-multiply`} />
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-          <span className="text-white border border-white px-6 py-2 text-xs uppercase tracking-widest">Ver Detalhes</span>
+        <div className={`absolute top-3 right-3 w-8 h-8 ${project.color} opacity-70 mix-blend-multiply`} />
+        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <span className="text-white border border-white/50 px-4 py-1.5 text-[9px] uppercase tracking-widest font-bold">Ver Detalhes</span>
         </div>
       </div>
-      <div className="mt-6">
-        <div className="flex items-center gap-2 mb-2">
-          <div className={`w-3 h-3 ${project.color}`} />
-          <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-zinc-400">Projeto Ativo</span>
+      <div className="mt-4">
+        <div className="flex items-center gap-1.5 mb-1.5">
+          <div className={`w-2 h-2 ${project.color}`} />
+          <span className="text-[9px] uppercase tracking-[0.2em] font-bold text-zinc-400">Ativo</span>
         </div>
-        <h3 className="text-xl font-bold tracking-tight mb-2 uppercase">{project.title}</h3>
-        <p className="text-zinc-500 text-sm leading-relaxed">{project.description}</p>
+        <h3 className="text-sm font-black tracking-tight mb-1 uppercase leading-tight group-hover:text-brand-primary transition-colors">{project.title}</h3>
+        <p className="text-zinc-500 text-[11px] leading-relaxed line-clamp-2">{project.description}</p>
       </div>
     </motion.div>
   );
@@ -153,11 +208,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#fafafa] text-zinc-900 font-sans selection:bg-blue-100">
+    <div className="min-h-screen bg-[#fafafa] text-zinc-900 font-sans selection:bg-blue-100 overflow-x-hidden">
       <Navbar />
 
       {/* Hero Section */}
-      <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden pt-20">
+      <section id="home" className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden pt-20 scroll-mt-20">
         <div className="absolute inset-0 z-0">
           <img 
             src="https://picsum.photos/seed/ngo-hero/1920/1080?grayscale" 
@@ -223,7 +278,7 @@ export default function App() {
       </section>
 
       {/* About Section */}
-      <section id="sobre" className="py-24 bg-white">
+      <section id="sobre" className="py-24 bg-white overflow-hidden scroll-mt-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-20 items-center">
             <motion.div
@@ -242,10 +297,9 @@ export default function App() {
                   className="w-full h-full object-cover pointer-events-none"
                 />
               </div>
-              {/* Artistic geometric overlays - Updated to brand colors */}
-              <div className="absolute -top-10 -left-10 w-40 h-40 bg-brand-secondary z-0 opacity-20" />
-              <div className="absolute -bottom-10 -right-10 w-60 h-60 border-2 border-zinc-200 z-0" />
-              <div className="absolute top-1/2 -translate-y-1/2 -right-6 w-12 h-12 bg-brand-primary z-20" />
+              <div className="absolute -top-6 -left-6 md:-top-10 md:-left-10 w-32 h-32 md:w-40 md:h-40 bg-brand-secondary z-0 opacity-20" />
+              <div className="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 w-48 h-48 md:w-60 md:h-60 border-2 border-zinc-200 z-0" />
+              <div className="absolute top-1/2 -translate-y-1/2 -right-4 w-8 h-8 md:w-12 md:h-12 bg-brand-primary z-20" />
             </motion.div>
 
             <div>
@@ -310,8 +364,67 @@ export default function App() {
         </div>
       </section>
 
+      {/* Magazines Section */}
+      <section id="revistas" className="py-24 bg-[#fafafa] overflow-hidden scroll-mt-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div className="max-w-2xl text-center md:text-left">
+              <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-4">Nossa Literatura</span>
+              <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9]">
+                Revistas <span className="text-zinc-400">Digitais</span>
+              </h2>
+            </div>
+            <p className="text-zinc-500 max-w-sm text-center md:text-right leading-relaxed">
+              Acesse nossas edições completas em PDF e leve a cultura cristã com você onde quer que esteja.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-12">
+            {CONTENT.magazines.map((mag, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="group relative flex flex-col md:flex-row bg-[#fdfdfd] border border-zinc-100 overflow-hidden hover:shadow-2xl hover:shadow-black/5 transition-all duration-500"
+              >
+                <div className="w-full md:w-5/12 aspect-[3/4] overflow-hidden">
+                  <img 
+                    src={mag.image} 
+                    alt={mag.title} 
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                  />
+                </div>
+                <div className="w-full md:w-7/12 p-10 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-6">
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary border border-brand-primary/20 px-3 py-1 bg-brand-primary/5">Edição {mag.edition}</span>
+                      <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{mag.date}</span>
+                    </div>
+                    <h3 className="text-2xl font-black uppercase tracking-tight mb-4 leading-tight">{mag.title}</h3>
+                    <p className="text-zinc-500 text-sm leading-relaxed mb-8">
+                      {mag.description}
+                    </p>
+                  </div>
+                  
+                  <a 
+                    href={mag.pdfUrl} 
+                    download 
+                    className="flex items-center justify-center gap-3 w-full py-5 bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-primary transition-all group/btn shadow-xl shadow-black/10"
+                  >
+                    <Download className="w-4 h-4 group-hover/btn:translate-y-1 transition-transform" />
+                    Baixar PDF
+                  </a>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Projects Grid */}
-      <section id="projetos" className="py-24 bg-[#fafafa]">
+      <section id="projetos" className="py-24 bg-white overflow-hidden scroll-mt-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
             <span className="text-xs uppercase tracking-[0.5em] font-bold text-zinc-400 block mb-4">O que fazemos</span>
@@ -323,7 +436,7 @@ export default function App() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
             {CONTENT.projects.map((project, idx) => (
               <ProjectCard key={idx} project={project} index={idx} />
             ))}
@@ -370,70 +483,38 @@ export default function App() {
       </section>
 
       {/* Donations Section */}
-      <section id="doacoes" className="py-24 bg-white">
+      <section id="doacoes" className="py-24 bg-white scroll-mt-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="bg-zinc-50 p-6 md:p-20 rounded-sm border border-zinc-100 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
             
-            <div className="grid lg:grid-cols-2 gap-16 relative z-10">
-              <div>
-                <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-4">Faça a diferença</span>
-                <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tighter mb-8 leading-none">
-                  Sua ajuda <br className="hidden sm:block" /> transforma <br className="hidden sm:block" /> realidades
-                </h2>
-                <p className="text-lg text-zinc-600 mb-10 leading-relaxed">
-                  Sua doação permite que continuemos desenvolvendo projetos culturais e educativos em nossa cidade. Escolha como deseja apoiar:
-                </p>
+            <div className="max-w-4xl mx-auto text-center relative z-10">
+              <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-4">Faça a diferença</span>
+              <h2 className="text-3xl sm:text-6xl font-black uppercase tracking-tighter mb-8 leading-none">
+                Sua ajuda transforma realidades
+              </h2>
+              <p className="text-lg md:text-xl text-zinc-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+                Sua doação permite que continuemos desenvolvendo projetos culturais e educativos em nossa cidade. Escolha um valor para contribuir agora:
+              </p>
 
-                <div className="space-y-6 mb-12">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-white border border-zinc-200 group hover:border-brand-primary transition-colors gap-4">
-                    <div className="w-full sm:w-auto">
-                      <span className="text-[10px] uppercase font-bold text-zinc-400 block">PIX Banco Cora</span>
-                      <span className="text-sm sm:text-lg font-mono font-bold break-all">{CONTENT.donations.pixCora}</span>
-                    </div>
-                    <button 
-                      onClick={() => navigator.clipboard.writeText(CONTENT.donations.pixCora)}
-                      className="text-xs font-bold uppercase tracking-widest text-brand-primary hover:text-brand-secondary shrink-0"
-                    >
-                      Copiar
-                    </button>
-                  </div>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-white border border-zinc-200 group hover:border-brand-primary transition-colors gap-4">
-                    <div className="w-full sm:w-auto">
-                      <span className="text-[10px] uppercase font-bold text-zinc-400 block">PIX PagBank</span>
-                      <span className="text-sm sm:text-lg font-mono font-bold break-all">{CONTENT.donations.pixPagBank}</span>
-                    </div>
-                    <button 
-                      onClick={() => navigator.clipboard.writeText(CONTENT.donations.pixPagBank)}
-                      className="text-xs font-bold uppercase tracking-widest text-brand-primary hover:text-brand-secondary shrink-0"
-                    >
-                      Copiar
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  {CONTENT.donations.suggestions.map((val) => (
-                    <button key={val} className="flex-1 min-w-[100px] px-4 py-3 bg-white border border-zinc-200 font-bold hover:bg-brand-primary hover:text-white transition-all text-sm">
-                      R$ {val}
-                    </button>
-                  ))}
-                </div>
+              <div className="grid sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
+                {CONTENT.donations.suggestions.map((item) => (
+                  <a 
+                    key={item.value} 
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center justify-center p-8 bg-white border-2 border-zinc-100 font-bold hover:border-brand-primary hover:text-brand-primary transition-all group shadow-sm hover:shadow-xl hover:-translate-y-1"
+                  >
+                    <span className="text-zinc-400 text-[10px] uppercase tracking-widest mb-2 group-hover:text-brand-primary/50">Doar</span>
+                    <span className="text-3xl font-black tracking-tight">R$ {item.value}</span>
+                  </a>
+                ))}
               </div>
 
-              <div className="w-full flex flex-col justify-center items-center text-center bg-white p-6 md:p-12 border border-zinc-200 shadow-sm mt-8 lg:mt-0">
-                <Heart className="w-16 h-16 text-brand-primary mb-6 animate-pulse" />
-                <h3 className="text-2xl font-bold uppercase mb-4">Doação Recorrente</h3>
-                <p className="text-zinc-500 mb-8">Torne-se um mantenedor mensal e ajude-nos a planejar o futuro com mais segurança.</p>
-                <a 
-                  href={CONTENT.donations.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="w-full bg-black text-white py-5 font-bold uppercase tracking-widest hover:bg-brand-primary transition-all flex items-center justify-center gap-2"
-                >
-                  Acessar Link de Doação <ExternalLink className="w-4 h-4" />
-                </a>
-                <p className="mt-4 text-[10px] text-zinc-400 uppercase tracking-widest">Plataforma Segura</p>
+              <div className="mt-12 flex items-center justify-center gap-2">
+                <Heart className="w-5 h-5 text-brand-primary animate-pulse" />
+                <span className="text-[10px] text-zinc-400 uppercase tracking-[0.2em] font-bold">Transação Segura via PagSeguro</span>
               </div>
             </div>
           </div>
@@ -441,12 +522,20 @@ export default function App() {
       </section>
 
       {/* Partners */}
-      <section className="py-20 border-y border-zinc-100 bg-white">
+      <section className="py-20 border-y border-zinc-100 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
-          <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-zinc-400 text-center block mb-12">Parceiros que acreditam na causa</span>
-          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all">
+          <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-zinc-400 text-center block mb-16">Parceiros que acreditam na causa</span>
+          
+          <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center items-center gap-x-8 gap-y-12 opacity-50 grayscale hover:grayscale-0 transition-all">
             {CONTENT.partners.map((partner, idx) => (
-              <span key={idx} className="text-xl md:text-2xl font-black uppercase tracking-tighter">{partner}</span>
+              <div 
+                key={idx} 
+                className="flex items-center justify-center text-center px-4"
+              >
+                <span className="text-sm md:text-xl lg:text-2xl font-black uppercase tracking-tighter leading-none break-words max-w-[150px] md:max-w-none">
+                  {partner}
+                </span>
+              </div>
             ))}
           </div>
         </div>
