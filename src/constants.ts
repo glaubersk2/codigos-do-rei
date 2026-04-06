@@ -20,33 +20,27 @@ export const CONTENT = {
   projects: [
     {
       title: "Revista Digital Cultura Cristã",
-      description: "Conteúdo relevante e edificante em formato digital.",
+      description: "Conteúdo relevante e edificante focado na transformação da cultura e valores cristãos.",
       image: "/imagem-revista.png",
       color: "bg-blue-400"
     },
     {
       title: "Encontro de Cultura Cristã",
-      description: "Eventos que reúnem arte, fé e comunidade.",
-      image: "https://picsum.photos/seed/meeting/800/600",
+      description: "Eventos que reúnem arte, música e café para fortalecer a comunidade e a identidade cristã.",
+      image: "/projetos/encontro-cultura-crista.jpeg",
       color: "bg-yellow-400"
     },
     {
       title: "Roda Cultural Kids",
-      description: "Desenvolvimento cultural para as novas gerações.",
-      image: "https://picsum.photos/seed/kids/800/600",
+      description: "Desenvolvimento criativo e cultural focado no público infantil através de atividades lúdicas.",
+      image: "/projetos/roda-cultural-kids.jpeg",
       color: "bg-pink-400"
     },
     {
       title: "Zakar – Jogo da Memória",
-      description: "Aprendizado lúdico com princípios bíblicos.",
-      image: "https://picsum.photos/seed/game/800/600",
+      description: "Aprendizado lúdico com princípios bíblicos, conectando gerações através da diversão.",
+      image: "/projetos/zakar-jogo.jpeg",
       color: "bg-green-400"
-    },
-    {
-      title: "Zakar – Teatro de Fantoches",
-      description: "Histórias que encantam e ensinam valores.",
-      image: "https://picsum.photos/seed/theater/800/600",
-      color: "bg-orange-400"
     }
   ],
   activities: [
@@ -59,20 +53,45 @@ export const CONTENT = {
   ],
   magazines: [
     {
+      title: "Cultura Cristã - Edição 04",
+      edition: "04",
+      description: "Nossa edição mais recente! Explorando o impacto da arte e educação na transformação da sociedade.",
+      image: "/capas-revista/edicao4.jpeg",
+      pdfUrl: "/revista-edicao-04.pdf",
+      date: "Abril de 2026"
+    },
+    {
       title: "Cultura Cristã - Edição 03",
       edition: "03",
-      description: "Nossa edição mais recente, focada na expansão da cultura cristã e no impacto social através da educação.",
-      image: "/imagem-revista.png",
+      description: "Acompanhe nossa terceira edição focada na expansão cultural e impacto social em São Gonçalo.",
+      image: "/capas-revista/edicao3.jpeg",
       pdfUrl: "/revista-edicao-03.pdf",
-      date: "16 de Janeiro de 2026"
+      date: "Janeiro de 2026"
+    },
+    {
+      title: "Cultura Cristã - Edição 02",
+      edition: "02",
+      description: "Aprofundando os princípios da educação bíblica e cultura inserida no dia a dia.",
+      image: "/capas-revista/edicao2.jpeg",
+      pdfUrl: "/revista-edicao-02.pdf",
+      date: "Setembro de 2025"
+    },
+    {
+      title: "Cultura Cristã - Edição 01",
+      edition: "01",
+      description: "Edição inaugural que lançou as bases do projeto Códigos do Rei.",
+      image: "/capas-revista/edicao1.jpeg",
+      pdfUrl: "/revista-edicao-01.pdf",
+      date: "Maio de 2020"
     }
   ],
+  magazinesFormUrl: "https://docs.google.com/forms/d/1SDw_c9QlfwAw5VFDHiBjwcbDDzuDAmkd7cAPWjC5ubM/viewform?pli=1&pli=1&pli=1&edit_requested=true",
   audience: "Famílias e pessoas que valorizam fé, princípios e o desenvolvimento da cultura cristã.",
   donations: {
     suggestions: [
-      { value: 30, link: "https://pag.ae/81uRfwuX3" },
-      { value: 50, link: "https://pag.ae/7_Ssd-fX9" },
-      { value: 100, link: "https://pag.ae/7_SsenhEo" }
+      { value: 30, link: "https://pag.ae/81EPJezKo" },
+      { value: 50, link: "https://pag.ae/81EPG-ENJ" },
+      { value: 100, link: "https://pag.ae/81EPKm9YG" }
     ]
   },
   partners: [
@@ -81,7 +100,7 @@ export const CONTENT = {
     "Pie Dance",
     "Rhema Colubande",
     "Açaí da tia Tati",
-    "RD CAR - Martelinho e Estética Automotiva",
+    "RD CAR - Martelinho de Ouro",
     "Rocha Ar Condicionado"
   ],
   contact: {

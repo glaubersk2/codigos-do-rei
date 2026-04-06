@@ -186,7 +186,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         <img 
           src={project.image} 
           alt={project.title} 
-          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
+          className="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-100"
           referrerPolicy="no-referrer"
         />
         <div className={`absolute top-3 right-3 w-8 h-8 ${project.color} opacity-70 mix-blend-multiply`} />
@@ -207,6 +207,100 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
 };
 
 export default function App() {
+  const [view, setView] = useState<'home' | 'downloads'>('home');
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [view]);
+
+  if (view === 'downloads') {
+    return (
+      <div className="min-h-screen bg-[#fafafa] text-zinc-900 font-sans selection:bg-blue-100 overflow-x-hidden">
+        {/* Navbar for Downloads */}
+        <nav className="fixed top-0 left-0 right-0 z-[999] w-full bg-white shadow-sm py-4">
+          <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
+            <button onClick={() => setView('home')} className="flex items-center gap-2 group">
+              <div className="w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
+                <img src="/logo.jpeg" alt="Logo" className="w-full h-full object-contain" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-black text-base md:text-xl tracking-tighter leading-none">CÓDIGOS</span>
+                <span className="font-bold text-[8px] md:text-[10px] tracking-[0.3em] text-zinc-400">DO REI</span>
+              </div>
+            </button>
+            <button 
+              onClick={() => setView('home')}
+              className="text-[10px] font-black uppercase tracking-[0.2em] bg-zinc-100 hover:bg-black hover:text-white px-6 py-3 transition-all rounded-sm flex items-center gap-2"
+            >
+              <ArrowRight className="w-4 h-4 rotate-180" /> Voltar ao Início
+            </button>
+          </div>
+        </nav>
+
+        {/* Downloads Content */}
+        <section className="pt-40 pb-24 px-6 max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-4">Arquivo Digital</span>
+            <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9] mb-8">
+              Edições <span className="text-zinc-400">Anteriores</span>
+            </h1>
+            <p className="text-zinc-500 max-w-2xl mx-auto leading-relaxed text-lg">
+              Acesse aqui todo o histórico da nossa literatura digital. Escolha a edição desejada para baixar diretamente o arquivo PDF.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {CONTENT.magazines.map((mag, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="bg-white border border-zinc-100 rounded-sm overflow-hidden hover:shadow-2xl transition-all group flex flex-col"
+              >
+                <div className="aspect-[3/4] overflow-hidden relative">
+                  <img 
+                    src={mag.image} 
+                    alt={mag.title} 
+                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute top-4 left-4 bg-black text-white text-[10px] font-black px-3 py-1 uppercase tracking-widest">
+                    Edição {mag.edition}
+                  </div>
+                </div>
+                <div className="p-8 flex flex-col flex-grow">
+                  <h3 className="text-xl font-black uppercase tracking-tight mb-3 leading-tight">{mag.title}</h3>
+                  <p className="text-zinc-500 text-xs leading-relaxed mb-8 flex-grow">{mag.description}</p>
+                  
+                  <a 
+                    href={mag.pdfUrl} 
+                    download
+                    className="flex items-center justify-center gap-3 w-full py-5 bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-primary transition-all group/btn shadow-xl shadow-black/10"
+                  >
+                    <Download className="w-4 h-4 group-hover/btn:translate-y-1 transition-transform" />
+                    Baixar PDF
+                  </a>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Footer for Downloads */}
+        <footer className="bg-white py-12 border-t border-zinc-100">
+          <div className="max-w-7xl mx-auto px-6 text-center">
+            <button onClick={() => setView('home')} className="font-bold text-lg tracking-tighter uppercase mb-4 inline-block">
+              CÓDIGOS DO REI
+            </button>
+            <p className="text-[10px] text-zinc-400 uppercase tracking-[0.2em]">
+              Semeando a cultura cristã através da palavra.
+            </p>
+          </div>
+        </footer>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#fafafa] text-zinc-900 font-sans selection:bg-blue-100 overflow-x-hidden">
       <Navbar />
@@ -215,7 +309,7 @@ export default function App() {
       <section id="home" className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden pt-20 scroll-mt-20">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://picsum.photos/seed/ngo-hero/1920/1080?grayscale" 
+            src="https://picsum.photos/seed/ngo-hero/1920/1080" 
             className="w-full h-full object-cover opacity-20"
             referrerPolicy="no-referrer"
           />
@@ -365,60 +459,77 @@ export default function App() {
       </section>
 
       {/* Magazines Section */}
-      <section id="revistas" className="py-24 bg-[#fafafa] overflow-hidden scroll-mt-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-            <div className="max-w-2xl text-center md:text-left">
-              <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-4">Nossa Literatura</span>
-              <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9]">
-                Revistas <span className="text-zinc-400">Digitais</span>
-              </h2>
-            </div>
-            <p className="text-zinc-500 max-w-sm text-center md:text-right leading-relaxed">
-              Acesse nossas edições completas em PDF e leve a cultura cristã com você onde quer que esteja.
+      <section id="revistas" className="py-32 bg-zinc-950 text-white overflow-hidden scroll-mt-20 relative">
+        {/* Decorative elements for the dark section */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-primary/10 rounded-full blur-[120px] -translate-y-1/2" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-secondary/5 rounded-full blur-[120px] translate-y-1/2" />
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="flex flex-col items-center text-center mb-20">
+            <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-6 px-4 py-1.5 border border-brand-primary/20 bg-brand-primary/5 rounded-full">Nossa Literatura</span>
+            <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none mb-8">
+              Revistas <span className="text-zinc-600">Digitais</span>
+            </h2>
+            <p className="text-zinc-400 max-w-2xl mx-auto leading-relaxed text-lg mb-12">
+              Transformando a mente através da leitura digital. Cadastre-se agora para receber nossas próximas edições diretamente em seu e-mail ou WhatsApp.
             </p>
+
+            {/* Main CTA Button */}
+            <a 
+              href={CONTENT.magazinesFormUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-brand-primary hover:bg-white hover:text-black text-white px-12 py-6 text-sm font-black uppercase tracking-[0.3em] transition-all rounded-sm shadow-2xl shadow-brand-primary/20 flex items-center gap-4 group mb-12 scale-110 hover:scale-105 active:scale-95"
+            >
+              <Download className="w-5 h-5 group-hover:animate-bounce" />
+              QUERO RECEBER AS PRÓXIMAS EDIÇÕES
+            </a>
           </div>
 
-          <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-12">
-            {CONTENT.magazines.map((mag, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="group relative flex flex-col md:flex-row bg-[#fdfdfd] border border-zinc-100 overflow-hidden hover:shadow-2xl hover:shadow-black/5 transition-all duration-500"
+          <div className="pt-16 border-t border-zinc-900">
+            <div className="flex items-center justify-between mb-12">
+              <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-3">
+                <span className="w-8 h-[1px] bg-zinc-800" /> Edições Anteriores para Download Direto
+              </h3>
+              <button 
+                onClick={() => setView('downloads')}
+                className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary hover:text-white transition-colors"
               >
-                <div className="w-full md:w-5/12 aspect-[3/4] overflow-hidden">
-                  <img 
-                    src={mag.image} 
-                    alt={mag.title} 
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-                  />
-                </div>
-                <div className="w-full md:w-7/12 p-10 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between mb-6">
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary border border-brand-primary/20 px-3 py-1 bg-brand-primary/5">Edição {mag.edition}</span>
-                      <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{mag.date}</span>
-                    </div>
-                    <h3 className="text-2xl font-black uppercase tracking-tight mb-4 leading-tight">{mag.title}</h3>
-                    <p className="text-zinc-500 text-sm leading-relaxed mb-8">
-                      {mag.description}
-                    </p>
-                  </div>
-                  
+                Ver Todas as {CONTENT.magazines.length} Edições →
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-4 gap-6 md:gap-12">
+              {CONTENT.magazines.slice(0, 4).map((mag, idx) => (
+                <motion.div 
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="group"
+                >
                   <a 
                     href={mag.pdfUrl} 
-                    download 
-                    className="flex items-center justify-center gap-3 w-full py-5 bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-primary transition-all group/btn shadow-xl shadow-black/10"
+                    download
+                    className="block relative aspect-[3/4] overflow-hidden bg-zinc-900 border border-zinc-800 rounded-sm mb-4"
                   >
-                    <Download className="w-4 h-4 group-hover/btn:translate-y-1 transition-transform" />
-                    Baixar PDF
+                    <img 
+                      src={mag.image} 
+                      alt={mag.title} 
+                      className="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-all duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-brand-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Download className="text-white w-6 h-6" />
+                    </div>
                   </a>
-                </div>
-              </motion.div>
-            ))}
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-black uppercase text-zinc-600 mb-1 group-hover:text-brand-primary transition-colors">Edição {mag.edition}</span>
+                    <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest leading-none">{mag.date}</span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -526,7 +637,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6">
           <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-zinc-400 text-center block mb-16">Parceiros que acreditam na causa</span>
           
-          <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center items-center gap-x-8 gap-y-12 opacity-50 grayscale hover:grayscale-0 transition-all">
+          <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center items-center gap-x-8 gap-y-12 opacity-50 hover:opacity-100 transition-all">
             {CONTENT.partners.map((partner, idx) => (
               <div 
                 key={idx} 
