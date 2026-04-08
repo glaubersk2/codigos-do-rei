@@ -23,6 +23,44 @@ import {
 } from 'lucide-react';
 import { CONTENT } from './constants';
 
+const RevealOnScroll: React.FC<{ children: React.ReactNode; animation?: string; delay?: string; className?: string; threshold?: number }> = ({ 
+  children, 
+  animation = 'animate__fadeInUp', 
+  delay = '0s',
+  className = '', 
+  threshold = 0.1 
+}) => {
+  const [isVisible, setIsVisible] = React.useState(false);
+  const domRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      });
+    }, { threshold });
+    
+    const { current } = domRef;
+    if (current) observer.observe(current);
+    
+    return () => {
+      if (current) observer.unobserve(current);
+    };
+  }, [threshold]);
+
+  return (
+    <div
+      ref={domRef}
+      className={`${className} ${isVisible ? `animate__animated ${animation}` : 'opacity-0'}`}
+      style={{ animationDelay: isVisible ? delay : '0s' }}
+    >
+      {children}
+    </div>
+  );
+};
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -91,7 +129,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
         <a href="#home" onClick={(e) => scrollToTarget(e, '#home')} className="flex items-center gap-2 group">
           <div className="w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
-            <img src="/logo.jpeg" alt="Logo" className="w-full h-full object-contain" />
+            <img src="/logo.jpeg" alt="Códigos do Rei Logo" className="w-full h-full object-contain" />
           </div>
           <div className="flex flex-col">
             <span className="font-black text-base md:text-xl tracking-tighter leading-none">CÓDIGOS</span>
@@ -168,50 +206,197 @@ const Navbar = () => {
 };
 
 
-interface ProjectCardProps {
-  project: any;
-  index: number;
-}
+const GalleryPage: React.FC<{ 
+  title: string; 
+  subtitle: string; 
+  photos: string[]; 
+  basePath: string; 
+  onBack: () => void;
+  onPhotoClick: (url: string) => void;
+}> = ({ title, subtitle, photos, basePath, onBack, onPhotoClick }) => (
+  <div className="min-h-screen bg-[#fafafa] text-zinc-900 font-sans selection:bg-blue-100 overflow-x-hidden">
+    {/* Navbar for Gallery */}
+    <nav className="fixed top-0 left-0 right-0 z-[999] w-full bg-white shadow-sm py-4">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
+        <button onClick={onBack} className="flex items-center gap-2 group">
+          <div className="w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
+            <img src="/logo.jpeg" alt="Códigos do Rei Logo" className="w-full h-full object-contain" />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-black text-base md:text-xl tracking-tighter leading-none">CÓDIGOS</span>
+            <span className="font-bold text-[8px] md:text-[10px] tracking-[0.3em] text-zinc-400">DO REI</span>
+          </div>
+        </button>
+        <button 
+          onClick={onBack}
+          className="text-[10px] font-black uppercase tracking-[0.2em] bg-zinc-100 hover:bg-black hover:text-white px-6 py-3 transition-all rounded-sm flex items-center gap-2"
+        >
+          <ArrowRight className="w-4 h-4 rotate-180" /> Voltar ao Início
+        </button>
+      </div>
+    </nav>
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
-  return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      className="relative group cursor-pointer"
-    >
-      <div className="aspect-[3/2] overflow-hidden relative rounded-sm shadow-sm border border-zinc-100">
-        <img 
-          src={project.image} 
-          alt={project.title} 
-          className="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-100"
-          referrerPolicy="no-referrer"
-        />
-        <div className={`absolute top-3 right-3 w-8 h-8 ${project.color} opacity-70 mix-blend-multiply`} />
-        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-          <span className="text-white border border-white/50 px-4 py-1.5 text-[9px] uppercase tracking-widest font-bold">Ver Detalhes</span>
-        </div>
+    {/* Gallery Content */}
+    <section className="pt-40 pb-24 px-6 max-w-7xl mx-auto">
+      <div className="text-center mb-20">
+        <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-4">Galeria de Fotos</span>
+        <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9] mb-8 text-center max-w-4xl mx-auto">
+          {title.split(' ').slice(0, 2).join(' ')} <span className="text-zinc-400">{title.split(' ').slice(2).join(' ')}</span>
+        </h1>
+        <p className="text-zinc-500 max-w-2xl mx-auto leading-relaxed text-lg">
+          {subtitle}
+        </p>
       </div>
-      <div className="mt-4">
-        <div className="flex items-center gap-1.5 mb-1.5">
-          <div className={`w-2 h-2 ${project.color}`} />
-          <span className="text-[9px] uppercase tracking-[0.2em] font-bold text-zinc-400">Ativo</span>
-        </div>
-        <h3 className="text-sm font-black tracking-tight mb-1 uppercase leading-tight group-hover:text-brand-primary transition-colors">{project.title}</h3>
-        <p className="text-zinc-500 text-[11px] leading-relaxed line-clamp-2">{project.description}</p>
+
+      <div className="columns-3 sm:columns-4 lg:columns-5 gap-2 sm:gap-6 space-y-2 sm:space-y-6">
+        {photos.map((photo, idx) => (
+          <RevealOnScroll 
+            key={idx} 
+            className="break-inside-avoid"
+            delay={`${(idx % 10) * 0.05}s`}
+            animation="animate__fadeInUp"
+            threshold={0.05}
+          >
+            <img 
+              src={`${basePath}/${photo}`} 
+              alt={`${title} - ${idx}`} 
+              onClick={() => onPhotoClick(`${basePath}/${photo}`)}
+              className="w-full h-auto rounded-sm shadow-sm cursor-zoom-in hover:shadow-2xl transition-all duration-700 hover:scale-[1.02]"
+            />
+          </RevealOnScroll>
+        ))}
       </div>
-    </motion.div>
-  );
-};
+    </section>
+
+    {/* Footer for Gallery */}
+    <footer className="bg-white py-12 border-t border-zinc-100">
+      <div className="max-w-7xl mx-auto px-6 text-center">
+        <button onClick={onBack} className="font-bold text-lg tracking-tighter uppercase mb-4 inline-block">
+          CÓDIGOS DO REI
+        </button>
+        <p className="text-[10px] text-zinc-400 uppercase tracking-[0.2em]">
+          Impactando gerações através da cultura e princípios.
+        </p>
+      </div>
+    </footer>
+  </div>
+);
 
 export default function App() {
-  const [view, setView] = useState<'home' | 'downloads'>('home');
+  const [view, setView] = useState<'home' | 'downloads' | 'kids' | 'encontro'>('home');
+  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const homeScrollPos = React.useRef(0);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Show welcome modal after a 1.2s delay for better UX
+    const timer = setTimeout(() => {
+      setShowWelcomeModal(true);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const navigateTo = (newView: 'home' | 'downloads' | 'kids' | 'encontro') => {
+    if (view === 'home') {
+      homeScrollPos.current = window.scrollY;
+    }
+    setView(newView);
+  };
+
+  useEffect(() => {
+    if (view === 'home') {
+      // Small timeout to allow DOM to finish rendering
+      setTimeout(() => {
+        window.scrollTo({ top: homeScrollPos.current, behavior: 'instant' });
+      }, 0);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
   }, [view]);
+
+  if (view === 'kids') {
+    return (
+      <>
+        <GalleryPage 
+          title="Roda Cultural Kids"
+          subtitle="Um ambiente que promove o acesso à cultura, à fé e à alegria, gerando transformação social por meio de experiências que valorizam a família e incentivam a conexão com a literatura bíblica."
+          photos={(CONTENT as any).kidsGallery}
+          basePath="/roda-cultural-kids"
+          onBack={() => navigateTo('home')}
+          onPhotoClick={(url) => setSelectedPhoto(url)}
+        />
+        {/* Lightbox Overlay */}
+        <AnimatePresence>
+          {selectedPhoto && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedPhoto(null)}
+              className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 md:p-12 cursor-pointer"
+            >
+              <button 
+                className="absolute top-6 right-6 text-white p-2 hover:bg-white/10 rounded-full transition-colors"
+                onClick={() => setSelectedPhoto(null)}
+              >
+                <X className="w-8 h-8" />
+              </button>
+              <motion.img 
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                src={selectedPhoto} 
+                className="max-w-full max-h-full object-contain shadow-2xl"
+                alt="Expanded view"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  }
+
+  if (view === 'encontro') {
+    return (
+      <>
+        <GalleryPage 
+          title="Encontro de Cultura Cristã"
+          subtitle="Atuamos como um ambiente de fomento, capacitação e conexão cultural, formando pessoas e potencializando talentos, onde a arte é ativada como expressão de fé, propósito e impacto transformador na sociedade."
+          photos={(CONTENT as any).encontroGallery}
+          basePath="/encontro-cultura"
+          onBack={() => navigateTo('home')}
+          onPhotoClick={(url) => setSelectedPhoto(url)}
+        />
+        {/* Lightbox Overlay */}
+        <AnimatePresence>
+          {selectedPhoto && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedPhoto(null)}
+              className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 md:p-12 cursor-pointer"
+            >
+              <button 
+                className="absolute top-6 right-6 text-white p-2 hover:bg-white/10 rounded-full transition-colors"
+                onClick={() => setSelectedPhoto(null)}
+              >
+                <X className="w-8 h-8" />
+              </button>
+              <motion.img 
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                src={selectedPhoto} 
+                className="max-w-full max-h-full object-contain shadow-2xl"
+                alt="Expanded view"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  }
 
   if (view === 'downloads') {
     return (
@@ -219,9 +404,9 @@ export default function App() {
         {/* Navbar for Downloads */}
         <nav className="fixed top-0 left-0 right-0 z-[999] w-full bg-white shadow-sm py-4">
           <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
-            <button onClick={() => setView('home')} className="flex items-center gap-2 group">
+            <button onClick={() => navigateTo('home')} className="flex items-center gap-2 group">
               <div className="w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
-                <img src="/logo.jpeg" alt="Logo" className="w-full h-full object-contain" />
+                <img src="/logo.jpeg" alt="Códigos do Rei Logo" className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col">
                 <span className="font-black text-base md:text-xl tracking-tighter leading-none">CÓDIGOS</span>
@@ -229,7 +414,7 @@ export default function App() {
               </div>
             </button>
             <button 
-              onClick={() => setView('home')}
+              onClick={() => navigateTo('home')}
               className="text-[10px] font-black uppercase tracking-[0.2em] bg-zinc-100 hover:bg-black hover:text-white px-6 py-3 transition-all rounded-sm flex items-center gap-2"
             >
               <ArrowRight className="w-4 h-4 rotate-180" /> Voltar ao Início
@@ -289,7 +474,7 @@ export default function App() {
         {/* Footer for Downloads */}
         <footer className="bg-white py-12 border-t border-zinc-100">
           <div className="max-w-7xl mx-auto px-6 text-center">
-            <button onClick={() => setView('home')} className="font-bold text-lg tracking-tighter uppercase mb-4 inline-block">
+            <button onClick={() => navigateTo('home')} className="font-bold text-lg tracking-tighter uppercase mb-4 inline-block">
               CÓDIGOS DO REI
             </button>
             <p className="text-[10px] text-zinc-400 uppercase tracking-[0.2em]">
@@ -310,6 +495,7 @@ export default function App() {
         <div className="absolute inset-0 z-0">
           <img 
             src="https://picsum.photos/seed/ngo-hero/1920/1080" 
+            alt="Impacto Social e Cultural"
             className="w-full h-full object-cover opacity-20"
             referrerPolicy="no-referrer"
           />
@@ -402,7 +588,7 @@ export default function App() {
                 <span className="text-xs uppercase tracking-[0.3em] font-bold text-zinc-400">Nossa História</span>
               </div>
               <h2 className="text-4xl font-black uppercase tracking-tighter mb-8 leading-none">
-                Transformando vidas desde 2020
+                Transformando desde 2020
               </h2>
               <p className="text-xl text-zinc-600 leading-relaxed mb-12">
                 {CONTENT.about.history}
@@ -466,12 +652,12 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="flex flex-col items-center text-center mb-20">
-            <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-6 px-4 py-1.5 border border-brand-primary/20 bg-brand-primary/5 rounded-full">Nossa Literatura</span>
+            <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-6 px-4 py-1.5 border border-brand-primary/20 bg-brand-primary/5 rounded-full">Literatura bíblica</span>
             <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none mb-8">
               Revistas <span className="text-zinc-600">Digitais</span>
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto leading-relaxed text-lg mb-12">
-              Transformando a mente através da leitura digital. Cadastre-se agora para receber nossas próximas edições diretamente em seu e-mail ou WhatsApp.
+              Cultura com base em princípios milenares. Cadastre-se agora para receber nossas próximas edições diretamente em seu e-mail ou WhatsApp.
             </p>
 
             {/* Main CTA Button */}
@@ -492,7 +678,7 @@ export default function App() {
                 <span className="w-8 h-[1px] bg-zinc-800" /> Edições Anteriores para Download Direto
               </h3>
               <button 
-                onClick={() => setView('downloads')}
+                onClick={() => navigateTo('downloads')}
                 className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary hover:text-white transition-colors"
               >
                 Ver Todas as {CONTENT.magazines.length} Edições →
@@ -501,18 +687,14 @@ export default function App() {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-4 gap-6 md:gap-12">
               {CONTENT.magazines.slice(0, 4).map((mag, idx) => (
-                <motion.div 
+                <RevealOnScroll 
                   key={idx}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="group"
+                  delay={`${idx * 0.1}s`}
                 >
                   <a 
                     href={mag.pdfUrl} 
                     download
-                    className="block relative aspect-[3/4] overflow-hidden bg-zinc-900 border border-zinc-800 rounded-sm mb-4"
+                    className="block relative aspect-[3/4] overflow-hidden bg-zinc-900 border border-zinc-800 rounded-sm mb-4 group"
                   >
                     <img 
                       src={mag.image} 
@@ -527,7 +709,7 @@ export default function App() {
                     <span className="text-[10px] font-black uppercase text-zinc-600 mb-1 group-hover:text-brand-primary transition-colors">Edição {mag.edition}</span>
                     <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest leading-none">{mag.date}</span>
                   </div>
-                </motion.div>
+                </RevealOnScroll>
               ))}
             </div>
           </div>
@@ -543,15 +725,47 @@ export default function App() {
               Nossos <span className="text-brand-primary">Projetos</span>
             </h2>
             <p className="mt-6 text-zinc-500 max-w-xl mx-auto">
-              Iniciativas focadas em cultura, educação e evangelismo para impactar São Gonçalo.
+              Iniciativas focadas em cultura, fé e educação para impactar cidades.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
-            {CONTENT.projects.map((project, idx) => (
-              <ProjectCard key={idx} project={project} index={idx} />
-            ))}
-          </div>
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-16 max-w-6xl mx-auto">
+          {CONTENT.projects.map((project, idx) => (
+            <RevealOnScroll key={idx} delay={`${idx * 0.1}s`} className="w-full sm:w-[320px] lg:w-[350px]">
+              <div 
+                className="relative group cursor-pointer"
+                onClick={() => {
+                  if (project.title.toLowerCase().includes('kids')) {
+                    navigateTo('kids');
+                  } else if (project.title.toLowerCase().includes('encontro')) {
+                    navigateTo('encontro');
+                  }
+                }}
+              >
+                <div className="aspect-[3/2] overflow-hidden relative rounded-sm shadow-sm border border-zinc-100">
+                  <img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-100"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className={`absolute top-3 right-3 w-8 h-8 ${project.color} opacity-70 mix-blend-multiply`} />
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="text-white border border-white/50 px-4 py-1.5 text-[9px] uppercase tracking-widest font-bold">Ver Galeria de Fotos</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <div className={`w-2 h-2 ${project.color}`} />
+                    <span className="text-[9px] uppercase tracking-[0.2em] font-bold text-zinc-400">Ativo</span>
+                  </div>
+                  <h3 className="text-sm font-black tracking-tight mb-1 uppercase leading-tight group-hover:text-brand-primary transition-colors">{project.title}</h3>
+                  <p className="text-zinc-500 text-[11px] leading-relaxed line-clamp-2">{project.description}</p>
+                </div>
+              </div>
+            </RevealOnScroll>
+          ))}
+        </div>
         </div>
       </section>
 
@@ -562,7 +776,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid md:grid-cols-2 gap-20">
             <div>
-              <h2 className="text-4xl font-black uppercase tracking-tighter mb-12">Atividades Diárias</h2>
+              <h2 className="text-4xl font-black uppercase tracking-tighter mb-12">ATIVIDADES MENSAIS</h2>
               <div className="space-y-6">
                 {CONTENT.activities.map((activity, idx) => (
                   <motion.div 
@@ -600,26 +814,30 @@ export default function App() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
             
             <div className="max-w-4xl mx-auto text-center relative z-10">
-              <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-4">Faça a diferença</span>
+              <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-4">Faça parte desse legado</span>
               <h2 className="text-3xl sm:text-6xl font-black uppercase tracking-tighter mb-8 leading-none">
-                Sua ajuda transforma realidades
+                Seja um Guardião da Cultura
               </h2>
               <p className="text-lg md:text-xl text-zinc-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-                Sua doação permite que continuemos desenvolvendo projetos culturais e educativos em nossa cidade. Escolha um valor para contribuir agora:
+                Com menos de R$1,99 por dia, você pode transformar completamente a vida de uma criança. Escolha um valor e comece agora a fazer parte dessa transformação:
               </p>
 
               <div className="grid sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                {CONTENT.donations.suggestions.map((item) => (
-                  <a 
+                {CONTENT.donations.suggestions.map((item, idx) => (
+                  <RevealOnScroll 
                     key={item.value} 
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex flex-col items-center justify-center p-8 bg-white border-2 border-zinc-100 font-bold hover:border-brand-primary hover:text-brand-primary transition-all group shadow-sm hover:shadow-xl hover:-translate-y-1"
+                    delay={`${idx * 0.1}s`}
                   >
-                    <span className="text-zinc-400 text-[10px] uppercase tracking-widest mb-2 group-hover:text-brand-primary/50">Doar</span>
-                    <span className="text-3xl font-black tracking-tight">R$ {item.value}</span>
-                  </a>
+                    <a 
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-col items-center justify-center p-8 bg-white border-2 border-zinc-100 font-bold hover:border-brand-primary hover:text-brand-primary transition-all group shadow-sm hover:shadow-xl hover:-translate-y-1 block w-full"
+                    >
+                      <span className="text-zinc-400 text-[10px] uppercase tracking-widest mb-2 group-hover:text-brand-primary/50">Doar</span>
+                      <span className="text-3xl font-black tracking-tight text-zinc-900">R$ {item.value}</span>
+                    </a>
+                  </RevealOnScroll>
                 ))}
               </div>
 
@@ -669,14 +887,82 @@ export default function App() {
             <p className="text-xs text-zinc-400 uppercase tracking-widest">
               © {new Date().getFullYear()} Códigos do Rei. Todos os direitos reservados.
             </p>
-
-            <div className="flex gap-6">
-              <a href="#" className="text-zinc-400 hover:text-black transition-colors"><Instagram className="w-5 h-5" /></a>
-              <a href="#" className="text-zinc-400 hover:text-black transition-colors"><Mail className="w-5 h-5" /></a>
-            </div>
           </div>
         </div>
       </footer>
+
+      {/* Welcome Modal Popup */}
+      <AnimatePresence>
+        {showWelcomeModal && view === 'home' && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[1000] flex items-center justify-center p-2 md:p-4 bg-black/80 backdrop-blur-md"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-white w-full max-w-4xl max-h-[95vh] overflow-y-auto relative shadow-2xl rounded-sm"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button 
+                onClick={() => setShowWelcomeModal(false)}
+                className="absolute top-4 right-4 z-20 bg-black/40 text-white p-2 hover:bg-black transition-colors rounded-full backdrop-blur-sm"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Image Section - Full Visible */}
+              <div className="w-full bg-zinc-100 flex items-center justify-center">
+                <img 
+                  src="/chamadas-2026/chamada2.png" 
+                  alt="ECC2026 - 2º Encontro de Cultura Cristã" 
+                  className="w-full h-auto animate__animated animate__fadeIn"
+                />
+              </div>
+
+              {/* Content Section - Extremely Compacted for Mobile */}
+              <div className="p-4 md:p-6 text-center bg-white border-t border-zinc-100 relative">
+                <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.4em] text-brand-primary block mb-2">SAVE THE DATE</span>
+                <h3 className="text-lg md:text-2xl font-black uppercase tracking-tighter leading-tight mb-2">
+                  ECC2026 <br className="md:hidden"/> 2º Encontro de Cultura Cristã
+                </h3>
+                <div className="flex flex-col items-center gap-1 mb-6">
+                  <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] leading-relaxed">
+                    Dia 20 de Junho às 9:00
+                  </p>
+                  <p className="text-[11px] font-black text-black uppercase tracking-widest border-b border-brand-primary pb-1">
+                    Local: SEST/SENAT
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <a 
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSfhoT0GMDIID_gwPE3Q1HLTE4UmyDaA48F2gIufihMvBQ1oDA/viewform?pli=1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setShowWelcomeModal(false)}
+                    className="w-full bg-black text-white py-4 text-xs font-black uppercase tracking-[0.2em] hover:bg-brand-primary transition-all shadow-xl shadow-black/10 flex items-center justify-center gap-3 group animate__animated animate__pulse animate__infinite"
+                  >
+                    Fazer Inscrição <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Progress Bar Sutil */}
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: '100%' }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="h-1 bg-brand-primary"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
