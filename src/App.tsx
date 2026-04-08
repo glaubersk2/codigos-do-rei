@@ -75,6 +75,7 @@ const Navbar = () => {
     { name: 'Início', href: '#home' },
     { name: 'Sobre', href: '#sobre' },
     { name: 'Revistas', href: '#revistas' },
+    { name: 'Agenda', href: '#agenda' },
     { name: 'Projetos', href: '#projetos' },
     { name: 'Doações', href: '#doacoes' },
   ];
@@ -713,6 +714,47 @@ export default function App() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="agenda" className="py-24 bg-white border-y border-zinc-50 scroll-mt-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <RevealOnScroll animation="animate__fadeInUp">
+            <div 
+              onClick={() => setShowWelcomeModal(true)}
+              className="group cursor-pointer relative bg-zinc-950 rounded-sm overflow-hidden flex flex-col md:flex-row items-stretch transition-all hover:shadow-2xl shadow-zinc-200/50"
+            >
+              <div className="w-full md:w-1/3 min-h-[300px] relative overflow-hidden">
+                <img 
+                  src="/chamadas-2026/chamada2.png" 
+                  alt="Próximo Evento ECC2026"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 opacity-80 group-hover:opacity-100"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/0 via-black/10 to-zinc-950 hidden md:block" />
+              </div>
+              <div className="flex-1 p-8 md:p-16 flex flex-col justify-center bg-zinc-950">
+                 <div className="flex items-center gap-3 mb-6">
+                    <Calendar className="w-5 h-5 text-brand-primary" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary">AGENDA 2026</span>
+                 </div>
+                 <h3 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-white mb-6 leading-[0.9]">
+                    ECC2026 <br className="hidden md:block"/> 2º Encontro de Cultura Cristã
+                 </h3>
+                 <p className="text-zinc-400 text-base md:text-xl mb-10 max-w-xl leading-relaxed">
+                    Atuamos como um ambiente de fomento, capacitação e conexão cultural. Participe do nosso próximo grande encontro presencial.
+                 </p>
+                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
+                    <button className="bg-white text-black px-12 py-5 text-[10px] font-black uppercase tracking-widest hover:bg-brand-primary hover:text-white transition-all shadow-xl shadow-brand-primary/10">
+                      Ver Informações & Inscrição
+                    </button>
+                    <div className="flex flex-col">
+                      <span className="text-white text-[12px] font-black uppercase tracking-widest">20 de Junho • 09:00</span>
+                      <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">Local: SEST/SENAT</span>
+                    </div>
+                 </div>
+              </div>
+            </div>
+          </RevealOnScroll>
         </div>
       </section>
 
