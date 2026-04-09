@@ -207,6 +207,43 @@ const Navbar = () => {
 };
 
 
+const GalleryCard: React.FC<{ 
+  src: string; 
+  alt: string; 
+  onClick: () => void;
+  index: number;
+}> = ({ src, alt, onClick, index }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <RevealOnScroll 
+      className="break-inside-avoid"
+      delay={`${(index % 10) * 0.05}s`}
+      animation="animate__fadeInUp"
+      threshold={0.05}
+    >
+      <div className={`relative group overflow-hidden rounded-sm bg-zinc-100 mb-2 sm:mb-6 transition-all duration-500 ${isLoaded ? 'shadow-sm' : 'shadow-none'}`}>
+        {!isLoaded && (
+          <div className="aspect-[3/4] w-full flex items-center justify-center bg-zinc-50 animate-pulse">
+            <div className="w-10 h-10 border-2 border-zinc-200 border-t-brand-primary rounded-full animate-spin opacity-20" />
+          </div>
+        )}
+        
+        <motion.img 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isLoaded ? 1 : 0 }}
+          transition={{ duration: 0.6 }}
+          src={src} 
+          alt={alt} 
+          onLoad={() => setIsLoaded(true)}
+          onClick={onClick}
+          className="w-full h-auto cursor-zoom-in group-hover:scale-[1.02] transition-transform duration-700 block"
+        />
+      </div>
+    </RevealOnScroll>
+  );
+};
+
 const GalleryPage: React.FC<{ 
   title: string; 
   subtitle: string; 
@@ -249,22 +286,15 @@ const GalleryPage: React.FC<{
         </p>
       </div>
 
-      <div className="columns-3 sm:columns-4 lg:columns-5 gap-2 sm:gap-6 space-y-2 sm:space-y-6">
+      <div className="columns-2 sm:columns-3 lg:columns-4 gap-2 sm:gap-6 space-y-0">
         {photos.map((photo, idx) => (
-          <RevealOnScroll 
-            key={idx} 
-            className="break-inside-avoid"
-            delay={`${(idx % 10) * 0.05}s`}
-            animation="animate__fadeInUp"
-            threshold={0.05}
-          >
-            <img 
-              src={`${basePath}/${photo}`} 
-              alt={`${title} - ${idx}`} 
-              onClick={() => onPhotoClick(`${basePath}/${photo}`)}
-              className="w-full h-auto rounded-sm shadow-sm cursor-zoom-in hover:shadow-2xl transition-all duration-700 hover:scale-[1.02]"
-            />
-          </RevealOnScroll>
+          <GalleryCard 
+            key={idx}
+            index={idx}
+            src={`${basePath}/${photo}`}
+            alt={`${title} - ${idx}`}
+            onClick={() => onPhotoClick(`${basePath}/${photo}`)}
+          />
         ))}
       </div>
     </section>
@@ -589,7 +619,7 @@ export default function App() {
                 <span className="text-xs uppercase tracking-[0.3em] font-bold text-zinc-400">Nossa História</span>
               </div>
               <h2 className="text-4xl font-black uppercase tracking-tighter mb-8 leading-none">
-                Transformando desde 2020
+                Transformando Vidas desde 2020
               </h2>
               <p className="text-xl text-zinc-600 leading-relaxed mb-12">
                 {CONTENT.about.history}
@@ -724,7 +754,7 @@ export default function App() {
               onClick={() => setShowWelcomeModal(true)}
               className="group cursor-pointer relative bg-zinc-950 rounded-sm overflow-hidden flex flex-col md:flex-row items-stretch transition-all hover:shadow-2xl shadow-zinc-200/50"
             >
-              <div className="w-full md:w-1/3 min-h-[300px] relative overflow-hidden">
+              <div className="w-full md:w-1/3 aspect-video md:aspect-auto h-auto md:min-h-[400px] relative overflow-hidden">
                 <img 
                   src="/chamadas-2026/chamada2.png" 
                   alt="Próximo Evento ECC2026"
@@ -732,7 +762,7 @@ export default function App() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/0 via-black/10 to-zinc-950 hidden md:block" />
               </div>
-              <div className="flex-1 p-8 md:p-16 flex flex-col justify-center bg-zinc-950">
+              <div className="flex-1 p-6 sm:p-10 md:p-16 flex flex-col justify-center bg-zinc-950">
                  <div className="flex items-center gap-3 mb-6">
                     <Calendar className="w-5 h-5 text-brand-primary" />
                     <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary">AGENDA 2026</span>
@@ -914,21 +944,66 @@ export default function App() {
 
 
       {/* Footer */}
-      <footer className="bg-white py-12 border-t border-zinc-100">
+      <footer className="bg-white py-20 border-t border-zinc-100">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 flex items-center justify-center overflow-hidden">
-                <img src="/logo.jpeg" alt="Logo" className="w-full h-full object-contain" />
+          <div className="grid md:grid-cols-3 gap-12 mb-16">
+            <div className="flex flex-col gap-6">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 flex items-center justify-center overflow-hidden">
+                  <img src="/logo.jpeg" alt="Códigos do Rei Logo" className="w-full h-full object-contain" />
+                </div>
+                <span className="font-bold text-xl tracking-tighter uppercase">
+                  CÓDIGOS DO REI
+                </span>
               </div>
-              <span className="font-bold text-lg tracking-tighter uppercase">
-                CÓDIGOS DO REI
-              </span>
+              <p className="text-zinc-500 text-sm leading-relaxed max-w-xs">
+                Cooperamos com a transformação social da nossa cidade por meio de uma cultura cristã relevante e atuante.
+              </p>
             </div>
-            
-            <p className="text-xs text-zinc-400 uppercase tracking-widest">
+
+            <div className="flex flex-col gap-6">
+              <h4 className="font-black text-xs uppercase tracking-[0.2em] text-zinc-400">Contato</h4>
+              <ul className="space-y-4">
+                <li className="flex items-center gap-3 text-zinc-600 hover:text-brand-primary transition-colors">
+                  <Mail className="w-4 h-4" />
+                  <a href={`mailto:${CONTENT.contact.email}`} className="text-sm font-bold uppercase tracking-wider">{CONTENT.contact.email}</a>
+                </li>
+                <li className="flex items-center gap-3 text-zinc-600 hover:text-brand-primary transition-colors">
+                  <Phone className="w-4 h-4" />
+                  <a href={`https://wa.me/55${CONTENT.contact.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-sm font-bold uppercase tracking-wider">{CONTENT.contact.whatsapp}</a>
+                </li>
+                <li className="flex items-center gap-3 text-zinc-600">
+                  <MapPin className="w-4 h-4" />
+                  <span className="text-sm font-bold uppercase tracking-wider">São Gonçalo, RJ</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="flex flex-col gap-6">
+              <h4 className="font-black text-xs uppercase tracking-[0.2em] text-zinc-400">Siga-nos</h4>
+              <a 
+                href={`https://instagram.com/${CONTENT.contact.instagram.replace('@', '')}`}
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 group"
+              >
+                <div className="w-10 h-10 bg-zinc-50 rounded-full flex items-center justify-center group-hover:bg-brand-primary group-hover:text-white transition-all">
+                  <Instagram className="w-5 h-5" />
+                </div>
+                <span className="text-sm font-bold uppercase tracking-wider text-zinc-600 group-hover:text-brand-primary transition-colors">{CONTENT.contact.instagram}</span>
+              </a>
+            </div>
+          </div>
+          
+          <div className="pt-8 border-t border-zinc-100 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-bold">
               © {new Date().getFullYear()} Códigos do Rei. Todos os direitos reservados.
             </p>
+            <div className="flex gap-6">
+              <span className="text-[10px] text-zinc-300 uppercase tracking-widest font-black">Fé</span>
+              <span className="text-[10px] text-zinc-300 uppercase tracking-widest font-black">Educação</span>
+              <span className="text-[10px] text-zinc-300 uppercase tracking-widest font-black">Cultura</span>
+            </div>
           </div>
         </div>
       </footer>
