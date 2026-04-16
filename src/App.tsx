@@ -9,11 +9,9 @@ import {
   Mail, 
   MapPin, 
   Phone, 
-  ChevronRight, 
   Menu, 
   X,
   ArrowRight,
-  ExternalLink,
   Sparkles,
   Target,
   History,
@@ -22,7 +20,6 @@ import {
   Download
 } from 'lucide-react';
 import { CONTENT } from './constants';
-
 const RevealOnScroll: React.FC<{ children: React.ReactNode; animation?: string; delay?: string; className?: string; threshold?: number }> = ({ 
   children, 
   animation = 'animate__fadeInUp', 
@@ -32,7 +29,6 @@ const RevealOnScroll: React.FC<{ children: React.ReactNode; animation?: string; 
 }) => {
   const [isVisible, setIsVisible] = React.useState(false);
   const domRef = React.useRef<HTMLDivElement>(null);
-
   React.useEffect(() => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -41,15 +37,12 @@ const RevealOnScroll: React.FC<{ children: React.ReactNode; animation?: string; 
         }
       });
     }, { threshold });
-    
     const { current } = domRef;
     if (current) observer.observe(current);
-    
     return () => {
       if (current) observer.unobserve(current);
     };
   }, [threshold]);
-
   return (
     <div
       ref={domRef}
@@ -60,17 +53,14 @@ const RevealOnScroll: React.FC<{ children: React.ReactNode; animation?: string; 
     </div>
   );
 };
-
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
   const navLinks = [
     { name: 'Início', href: '#home' },
     { name: 'Sobre', href: '#sobre' },
@@ -79,18 +69,14 @@ const Navbar = () => {
     { name: 'Projetos', href: '#projetos' },
     { name: 'Doações', href: '#doacoes' },
   ];
-
   const scrollToTarget = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setIsMobileMenuOpen(false);
-    
-    // Check if it's pointing to the top
     if (href === '#home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       window.history.pushState(null, '', href);
       return;
     }
-
     const targetId = href.replace('#', '');
     const elem = document.getElementById(targetId);
     if (elem) {
@@ -98,12 +84,9 @@ const Navbar = () => {
       window.history.pushState(null, '', href);
     }
   };
-
   const handleMobileNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setIsMobileMenuOpen(false);
-    
-    // Wait for the menu's closing animation to begin so layout changes don't cancel the scroll
     setTimeout(() => {
       if (href === '#home') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -117,7 +100,6 @@ const Navbar = () => {
       window.history.pushState(null, '', href);
     }, 150);
   };
-
   return (
     <nav 
       className={`fixed top-0 left-0 right-0 z-[999] w-full transition-all duration-300 ${
@@ -126,6 +108,7 @@ const Navbar = () => {
           : 'bg-white/90 backdrop-blur-md py-4 translate-y-0'
       }`}
       style={{ position: 'fixed', top: 0, left: 0, right: 0 }}
+      aria-label="Navegação principal"
     >
       <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
         <a href="#home" onClick={(e) => scrollToTarget(e, '#home')} className="flex items-center gap-2 group">
@@ -138,7 +121,6 @@ const Navbar = () => {
           </div>
         </a>
 
-        {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8">
           {navLinks.map((link) => (
             <a 
@@ -158,8 +140,6 @@ const Navbar = () => {
             Apoie Agora
           </a>
         </div>
-
-        {/* Mobile Actions */}
         <div className="flex md:hidden items-center gap-3">
           <a 
             href="#doacoes" 
@@ -171,14 +151,13 @@ const Navbar = () => {
           <button 
             className="p-1 text-zinc-900" 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle Menu"
+            aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+            aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
-
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div 
@@ -205,8 +184,6 @@ const Navbar = () => {
     </nav>
   );
 };
-
-
 const GalleryCard: React.FC<{ 
   src: string; 
   alt: string; 
@@ -214,7 +191,6 @@ const GalleryCard: React.FC<{
   index: number;
 }> = ({ src, alt, onClick, index }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-
   return (
     <RevealOnScroll 
       className="break-inside-avoid"
@@ -228,7 +204,6 @@ const GalleryCard: React.FC<{
             <div className="w-10 h-10 border-2 border-zinc-200 border-t-brand-primary rounded-full animate-spin opacity-20" />
           </div>
         )}
-        
         <motion.img 
           initial={{ opacity: 0 }}
           animate={{ opacity: isLoaded ? 1 : 0 }}
@@ -237,13 +212,13 @@ const GalleryCard: React.FC<{
           alt={alt} 
           onLoad={() => setIsLoaded(true)}
           onClick={onClick}
+          loading="lazy"
           className="w-full h-auto cursor-zoom-in group-hover:scale-[1.02] transition-transform duration-700 block"
         />
       </div>
     </RevealOnScroll>
   );
 };
-
 const GalleryPage: React.FC<{ 
   title: string; 
   subtitle: string; 
@@ -253,7 +228,6 @@ const GalleryPage: React.FC<{
   onPhotoClick: (url: string) => void;
 }> = ({ title, subtitle, photos, basePath, onBack, onPhotoClick }) => (
   <div className="min-h-screen bg-[#fafafa] text-zinc-900 font-sans selection:bg-blue-100 overflow-x-hidden">
-    {/* Navbar for Gallery */}
     <nav className="fixed top-0 left-0 right-0 z-[999] w-full bg-white shadow-sm py-4">
       <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
         <button onClick={onBack} className="flex items-center gap-2 group">
@@ -273,8 +247,6 @@ const GalleryPage: React.FC<{
         </button>
       </div>
     </nav>
-
-    {/* Gallery Content */}
     <section className="pt-40 pb-24 px-6 max-w-7xl mx-auto">
       <div className="text-center mb-20">
         <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-4">Galeria de Fotos</span>
@@ -285,21 +257,18 @@ const GalleryPage: React.FC<{
           {subtitle}
         </p>
       </div>
-
       <div className="columns-2 sm:columns-3 lg:columns-4 gap-2 sm:gap-6 space-y-0">
         {photos.map((photo, idx) => (
           <GalleryCard 
             key={idx}
             index={idx}
             src={`${basePath}/${photo}`}
-            alt={`${title} - ${idx}`}
+            alt={`Foto ${idx + 1} do evento ${title} - Códigos do Rei`}
             onClick={() => onPhotoClick(`${basePath}/${photo}`)}
           />
         ))}
       </div>
     </section>
-
-    {/* Footer for Gallery */}
     <footer className="bg-white py-12 border-t border-zinc-100">
       <div className="max-w-7xl mx-auto px-6 text-center">
         <button onClick={onBack} className="font-bold text-lg tracking-tighter uppercase mb-4 inline-block">
@@ -312,31 +281,25 @@ const GalleryPage: React.FC<{
     </footer>
   </div>
 );
-
 export default function App() {
   const [view, setView] = useState<'home' | 'downloads' | 'kids' | 'encontro'>('home');
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const homeScrollPos = React.useRef(0);
-
   useEffect(() => {
-    // Show welcome modal after a 1.2s delay for better UX
     const timer = setTimeout(() => {
       setShowWelcomeModal(true);
     }, 1200);
     return () => clearTimeout(timer);
   }, []);
-
   const navigateTo = (newView: 'home' | 'downloads' | 'kids' | 'encontro') => {
     if (view === 'home') {
       homeScrollPos.current = window.scrollY;
     }
     setView(newView);
   };
-
   useEffect(() => {
     if (view === 'home') {
-      // Small timeout to allow DOM to finish rendering
       setTimeout(() => {
         window.scrollTo({ top: homeScrollPos.current, behavior: 'instant' });
       }, 0);
@@ -344,7 +307,6 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
   }, [view]);
-
   if (view === 'kids') {
     return (
       <>
@@ -356,7 +318,6 @@ export default function App() {
           onBack={() => navigateTo('home')}
           onPhotoClick={(url) => setSelectedPhoto(url)}
         />
-        {/* Lightbox Overlay */}
         <AnimatePresence>
           {selectedPhoto && (
             <motion.div 
@@ -378,7 +339,7 @@ export default function App() {
                 exit={{ scale: 0.9, opacity: 0 }}
                 src={selectedPhoto} 
                 className="max-w-full max-h-full object-contain shadow-2xl"
-                alt="Expanded view"
+                alt="Foto ampliada do evento Roda Cultural Kids"
               />
             </motion.div>
           )}
@@ -386,7 +347,6 @@ export default function App() {
       </>
     );
   }
-
   if (view === 'encontro') {
     return (
       <>
@@ -398,7 +358,6 @@ export default function App() {
           onBack={() => navigateTo('home')}
           onPhotoClick={(url) => setSelectedPhoto(url)}
         />
-        {/* Lightbox Overlay */}
         <AnimatePresence>
           {selectedPhoto && (
             <motion.div 
@@ -420,7 +379,7 @@ export default function App() {
                 exit={{ scale: 0.9, opacity: 0 }}
                 src={selectedPhoto} 
                 className="max-w-full max-h-full object-contain shadow-2xl"
-                alt="Expanded view"
+                alt="Foto ampliada do Encontro de Cultura Cristã"
               />
             </motion.div>
           )}
@@ -428,11 +387,9 @@ export default function App() {
       </>
     );
   }
-
   if (view === 'downloads') {
     return (
       <div className="min-h-screen bg-[#fafafa] text-zinc-900 font-sans selection:bg-blue-100 overflow-x-hidden">
-        {/* Navbar for Downloads */}
         <nav className="fixed top-0 left-0 right-0 z-[999] w-full bg-white shadow-sm py-4">
           <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
             <button onClick={() => navigateTo('home')} className="flex items-center gap-2 group">
@@ -452,8 +409,6 @@ export default function App() {
             </button>
           </div>
         </nav>
-
-        {/* Downloads Content */}
         <section className="pt-40 pb-24 px-6 max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-4">Arquivo Digital</span>
@@ -464,7 +419,6 @@ export default function App() {
               Acesse aqui todo o histórico da nossa literatura digital. Escolha a edição desejada para baixar diretamente o arquivo PDF.
             </p>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {CONTENT.magazines.map((mag, idx) => (
               <motion.div 
@@ -477,7 +431,8 @@ export default function App() {
                 <div className="aspect-[3/4] overflow-hidden relative">
                   <img 
                     src={mag.image} 
-                    alt={mag.title} 
+                    alt={`Capa da ${mag.title} - Revista Digital Cristã`} 
+                    loading="lazy"
                     className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                   />
                   <div className="absolute top-4 left-4 bg-black text-white text-[10px] font-black px-3 py-1 uppercase tracking-widest">
@@ -487,7 +442,6 @@ export default function App() {
                 <div className="p-8 flex flex-col flex-grow">
                   <h3 className="text-xl font-black uppercase tracking-tight mb-3 leading-tight">{mag.title}</h3>
                   <p className="text-zinc-500 text-xs leading-relaxed mb-8 flex-grow">{mag.description}</p>
-                  
                   <a 
                     href={mag.pdfUrl} 
                     download
@@ -501,8 +455,6 @@ export default function App() {
             ))}
           </div>
         </section>
-
-        {/* Footer for Downloads */}
         <footer className="bg-white py-12 border-t border-zinc-100">
           <div className="max-w-7xl mx-auto px-6 text-center">
             <button onClick={() => navigateTo('home')} className="font-bold text-lg tracking-tighter uppercase mb-4 inline-block">
@@ -516,23 +468,21 @@ export default function App() {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen bg-[#fafafa] text-zinc-900 font-sans selection:bg-blue-100 overflow-x-hidden">
       <Navbar />
-
-      {/* Hero Section */}
+      <main>
       <section id="home" className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden pt-20 scroll-mt-20">
         <div className="absolute inset-0 z-0">
           <img 
             src="https://picsum.photos/seed/ngo-hero/1920/1080" 
-            alt="Impacto Social e Cultural"
+            alt="Impacto social e cultural de projetos cristãos em São Gonçalo"
             className="w-full h-full object-cover opacity-20"
             referrerPolicy="no-referrer"
+            fetchPriority="low"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-[#fafafa]" />
         </div>
-
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -540,9 +490,7 @@ export default function App() {
             transition={{ duration: 0.8 }}
             className="mb-8 inline-block"
           >
-            {/* Removido São Gonçalo / RJ daqui */}
           </motion.div>
-          
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -555,7 +503,6 @@ export default function App() {
               </span>
             ))}
           </motion.h1>
-
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -564,7 +511,6 @@ export default function App() {
           >
             {CONTENT.hero.subtitle}
           </motion.p>
-
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -579,16 +525,10 @@ export default function App() {
             </a>
           </motion.div>
         </div>
-
-        {/* Geometric Accents - Updated to brand colors */}
         <div className="absolute bottom-20 left-10 w-24 h-24 bg-brand-secondary/20 rounded-full blur-3xl animate-pulse" />
         <div className="absolute top-40 right-10 w-32 h-32 bg-brand-primary/20 rounded-full blur-3xl animate-pulse delay-700" />
-        
-        {/* Subtle QR Pattern Overlay */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
       </section>
-
-      {/* About Section */}
       <section id="sobre" className="py-24 bg-white overflow-hidden scroll-mt-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-20 items-center">
@@ -605,6 +545,8 @@ export default function App() {
                   muted 
                   loop 
                   playsInline
+                  preload="none"
+                  aria-label="Vídeo institucional do Códigos do Rei mostrando ações e eventos"
                   className="w-full h-full object-cover pointer-events-none"
                 />
               </div>
@@ -612,7 +554,6 @@ export default function App() {
               <div className="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 w-48 h-48 md:w-60 md:h-60 border-2 border-zinc-200 z-0" />
               <div className="absolute top-1/2 -translate-y-1/2 -right-4 w-8 h-8 md:w-12 md:h-12 bg-brand-primary z-20" />
             </motion.div>
-
             <div>
               <div className="flex items-center gap-3 mb-6">
                 <History className="text-brand-primary w-5 h-5" />
@@ -624,27 +565,24 @@ export default function App() {
               <p className="text-xl text-zinc-600 leading-relaxed mb-12">
                 {CONTENT.about.history}
               </p>
-
               <div className="grid sm:grid-cols-2 gap-8">
                 <div className="p-6 bg-zinc-50 border-l-4 border-brand-primary">
                   <div className="flex items-center gap-2 mb-3">
                     <Target className="w-4 h-4 text-brand-primary" />
-                    <h4 className="font-bold uppercase text-xs tracking-widest">Missão</h4>
+                    <h3 className="font-bold uppercase text-xs tracking-widest">Missão</h3>
                   </div>
                   <p className="text-sm text-zinc-500 leading-relaxed">{CONTENT.about.mission}</p>
                 </div>
                 <div className="p-6 bg-zinc-50 border-l-4 border-brand-secondary">
                   <div className="flex items-center gap-2 mb-3">
                     <Sparkles className="w-4 h-4 text-brand-secondary" />
-                    <h4 className="font-bold uppercase text-xs tracking-widest">Visão</h4>
+                    <h3 className="font-bold uppercase text-xs tracking-widest">Visão</h3>
                   </div>
                   <p className="text-sm text-zinc-500 leading-relaxed">{CONTENT.about.vision}</p>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Values */}
           <div className="mt-32 grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
             {CONTENT.about.values.map((value, idx) => {
               const Icon = {
@@ -653,7 +591,6 @@ export default function App() {
                 Brain,
                 BookOpen
               }[value.icon] || CheckCircle2;
-              
               return (
                 <motion.div 
                   key={idx}
@@ -666,7 +603,7 @@ export default function App() {
                   <div className="w-20 h-20 bg-white border border-zinc-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:border-brand-primary group-hover:bg-brand-primary/5 transition-all duration-500 rotate-3 group-hover:rotate-0 shadow-sm">
                     <Icon className="w-10 h-10 text-brand-primary" />
                   </div>
-                  <h4 className="font-bold uppercase tracking-tight mb-3">{value.title}</h4>
+                  <h3 className="font-bold uppercase tracking-tight mb-3">{value.title}</h3>
                   <p className="text-sm text-zinc-500 leading-relaxed px-4">{value.description}</p>
                 </motion.div>
               );
@@ -674,13 +611,9 @@ export default function App() {
           </div>
         </div>
       </section>
-
-      {/* Magazines Section */}
       <section id="revistas" className="py-32 bg-zinc-950 text-white overflow-hidden scroll-mt-20 relative">
-        {/* Decorative elements for the dark section */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-primary/10 rounded-full blur-[120px] -translate-y-1/2" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-secondary/5 rounded-full blur-[120px] translate-y-1/2" />
-
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="flex flex-col items-center text-center mb-20">
             <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-6 px-4 py-1.5 border border-brand-primary/20 bg-brand-primary/5 rounded-full">Literatura bíblica</span>
@@ -690,8 +623,6 @@ export default function App() {
             <p className="text-zinc-400 max-w-2xl mx-auto leading-relaxed text-lg mb-12">
               Cultura com base em princípios milenares. Cadastre-se agora para receber nossas próximas edições diretamente em seu e-mail ou WhatsApp.
             </p>
-
-            {/* Main CTA Button */}
             <a 
               href={CONTENT.magazinesFormUrl}
               target="_blank"
@@ -702,7 +633,6 @@ export default function App() {
               QUERO RECEBER AS PRÓXIMAS EDIÇÕES
             </a>
           </div>
-
           <div className="pt-16 border-t border-zinc-900">
             <div className="flex items-center justify-between mb-12">
               <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-3">
@@ -715,7 +645,6 @@ export default function App() {
                 Ver Todas as {CONTENT.magazines.length} Edições →
               </button>
             </div>
-
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-4 gap-6 md:gap-12">
               {CONTENT.magazines.slice(0, 4).map((mag, idx) => (
                 <RevealOnScroll 
@@ -729,7 +658,8 @@ export default function App() {
                   >
                     <img 
                       src={mag.image} 
-                      alt={mag.title} 
+                      alt={`Capa da ${mag.title} - Download PDF`} 
+                      loading="lazy"
                       className="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-all duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-brand-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -746,7 +676,6 @@ export default function App() {
           </div>
         </div>
       </section>
-
       <section id="agenda" className="py-24 bg-white border-y border-zinc-50 scroll-mt-20">
         <div className="max-w-7xl mx-auto px-6">
           <RevealOnScroll animation="animate__fadeInUp">
@@ -757,7 +686,8 @@ export default function App() {
               <div className="w-full md:w-1/3 aspect-video md:aspect-auto h-auto md:min-h-[400px] relative overflow-hidden">
                 <img 
                   src="/chamadas-2026/chamada2.png" 
-                  alt="Próximo Evento ECC2026"
+                  alt="ECC2026 - 2º Encontro de Cultura Cristã, 20 de Junho de 2026 no SEST/SENAT São Gonçalo"
+                  loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 opacity-80 group-hover:opacity-100"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/0 via-black/10 to-zinc-950 hidden md:block" />
@@ -767,9 +697,9 @@ export default function App() {
                     <Calendar className="w-5 h-5 text-brand-primary" />
                     <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary">AGENDA 2026</span>
                  </div>
-                 <h3 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-white mb-6 leading-[0.9]">
+                 <h2 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-white mb-6 leading-[0.9]">
                     ECC2026 <br className="hidden md:block"/> 2º Encontro de Cultura Cristã
-                 </h3>
+                 </h2>
                  <p className="text-zinc-400 text-base md:text-xl mb-10 max-w-xl leading-relaxed">
                     Atuamos como um ambiente de fomento, capacitação e conexão cultural. Participe do nosso próximo grande encontro presencial.
                  </p>
@@ -787,8 +717,6 @@ export default function App() {
           </RevealOnScroll>
         </div>
       </section>
-
-      {/* Projects Grid */}
       <section id="projetos" className="py-24 bg-white overflow-hidden scroll-mt-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
@@ -800,7 +728,6 @@ export default function App() {
               Iniciativas focadas em cultura, fé e educação para impactar cidades.
             </p>
           </div>
-
         <div className="flex flex-wrap justify-center gap-x-8 gap-y-16 max-w-6xl mx-auto">
           {CONTENT.projects.map((project, idx) => (
             <RevealOnScroll key={idx} delay={`${idx * 0.1}s`} className="w-full sm:w-[320px] lg:w-[350px]">
@@ -817,7 +744,8 @@ export default function App() {
                 <div className="aspect-[3/2] overflow-hidden relative rounded-sm shadow-sm border border-zinc-100">
                   <img 
                     src={project.image} 
-                    alt={project.title} 
+                    alt={`Projeto ${project.title} - Códigos do Rei São Gonçalo`} 
+                    loading="lazy"
                     className="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-100"
                     referrerPolicy="no-referrer"
                   />
@@ -840,15 +768,12 @@ export default function App() {
         </div>
         </div>
       </section>
-
-      {/* Activities & Audience */}
-      <section className="py-24 bg-black text-white overflow-hidden relative">
+      <section id="atividades" aria-labelledby="atividades-heading" className="py-24 bg-black text-white overflow-hidden relative">
         <div className="absolute top-0 right-0 w-1/3 h-full bg-zinc-900 skew-x-12 translate-x-1/2" />
-        
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid md:grid-cols-2 gap-20">
             <div>
-              <h2 className="text-4xl font-black uppercase tracking-tighter mb-12">ATIVIDADES MENSAIS</h2>
+              <h2 id="atividades-heading" className="text-4xl font-black uppercase tracking-tighter mb-12">ATIVIDADES MENSAIS</h2>
               <div className="space-y-6">
                 {CONTENT.activities.map((activity, idx) => (
                   <motion.div 
@@ -865,11 +790,10 @@ export default function App() {
                 ))}
               </div>
             </div>
-            
             <div className="flex flex-col justify-center">
               <div className="p-12 border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm">
                 <Users className="w-12 h-12 text-yellow-400 mb-8" />
-                <h3 className="text-3xl font-bold uppercase tracking-tight mb-6">Para quem existimos</h3>
+                <h3 id="audiencia-heading" className="text-3xl font-bold uppercase tracking-tight mb-6">Para quem existimos</h3>
                 <p className="text-xl text-zinc-400 leading-relaxed italic">
                   "{CONTENT.audience}"
                 </p>
@@ -878,13 +802,10 @@ export default function App() {
           </div>
         </div>
       </section>
-
-      {/* Donations Section */}
       <section id="doacoes" className="py-24 bg-white scroll-mt-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="bg-zinc-50 p-6 md:p-20 rounded-sm border border-zinc-100 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-            
             <div className="max-w-4xl mx-auto text-center relative z-10">
               <span className="text-xs uppercase tracking-[0.5em] font-bold text-brand-primary block mb-4">Faça parte desse legado</span>
               <h2 className="text-3xl sm:text-6xl font-black uppercase tracking-tighter mb-8 leading-none">
@@ -893,7 +814,6 @@ export default function App() {
               <p className="text-lg md:text-xl text-zinc-600 mb-12 max-w-2xl mx-auto leading-relaxed">
                 Com menos de R$1,99 por dia, você pode transformar completamente a vida de uma criança. Escolha um valor e comece agora a fazer parte dessa transformação:
               </p>
-
               <div className="grid sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
                 {CONTENT.donations.suggestions.map((item, idx) => (
                   <RevealOnScroll 
@@ -912,7 +832,6 @@ export default function App() {
                   </RevealOnScroll>
                 ))}
               </div>
-
               <div className="mt-12 flex items-center justify-center gap-2">
                 <Heart className="w-5 h-5 text-brand-primary animate-pulse" />
                 <span className="text-[10px] text-zinc-400 uppercase tracking-[0.2em] font-bold">Transação Segura via PagSeguro</span>
@@ -921,12 +840,9 @@ export default function App() {
           </div>
         </div>
       </section>
-
-      {/* Partners */}
-      <section className="py-20 border-y border-zinc-100 bg-white overflow-hidden">
+      <section id="parceiros" aria-labelledby="parceiros-heading" className="py-20 border-y border-zinc-100 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
-          <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-zinc-400 text-center block mb-16">Parceiros que acreditam na causa</span>
-          
+          <h2 id="parceiros-heading" className="text-[10px] uppercase tracking-[0.5em] font-bold text-zinc-400 text-center block mb-16">Parceiros que acreditam na causa</h2>
           <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center items-center gap-x-8 gap-y-12 opacity-50 hover:opacity-100 transition-all">
             {CONTENT.partners.map((partner, idx) => (
               <div 
@@ -941,16 +857,14 @@ export default function App() {
           </div>
         </div>
       </section>
-
-
-      {/* Footer */}
+      </main>
       <footer className="bg-white py-20 border-t border-zinc-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-3 gap-12 mb-16">
             <div className="flex flex-col gap-6">
               <div className="flex items-center gap-2">
                 <div className="w-10 h-10 flex items-center justify-center overflow-hidden">
-                  <img src="/logo.jpeg" alt="Códigos do Rei Logo" className="w-full h-full object-contain" />
+                  <img src="/logo.jpeg" alt="Logo do Códigos do Rei - Cultura Cristã em São Gonçalo" className="w-full h-full object-contain" loading="lazy" />
                 </div>
                 <span className="font-bold text-xl tracking-tighter uppercase">
                   CÓDIGOS DO REI
@@ -960,7 +874,6 @@ export default function App() {
                 Cooperamos com a transformação social da nossa cidade por meio de uma cultura cristã relevante e atuante.
               </p>
             </div>
-
             <div className="flex flex-col gap-6">
               <h4 className="font-black text-xs uppercase tracking-[0.2em] text-zinc-400">Contato</h4>
               <ul className="space-y-4">
@@ -978,7 +891,6 @@ export default function App() {
                 </li>
               </ul>
             </div>
-
             <div className="flex flex-col gap-6">
               <h4 className="font-black text-xs uppercase tracking-[0.2em] text-zinc-400">Siga-nos</h4>
               <a 
@@ -986,6 +898,7 @@ export default function App() {
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 group"
+                aria-label="Siga-nos no Instagram"
               >
                 <div className="w-10 h-10 bg-zinc-50 rounded-full flex items-center justify-center group-hover:bg-brand-primary group-hover:text-white transition-all">
                   <Instagram className="w-5 h-5" />
@@ -994,7 +907,6 @@ export default function App() {
               </a>
             </div>
           </div>
-          
           <div className="pt-8 border-t border-zinc-100 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-bold">
               © {new Date().getFullYear()} Códigos do Rei. Todos os direitos reservados.
@@ -1007,8 +919,6 @@ export default function App() {
           </div>
         </div>
       </footer>
-
-      {/* Welcome Modal Popup */}
       <AnimatePresence>
         {showWelcomeModal && view === 'home' && (
           <motion.div 
@@ -1024,15 +934,12 @@ export default function App() {
               className="bg-white w-full max-w-4xl max-h-[95vh] overflow-y-auto relative shadow-2xl rounded-sm"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close Button */}
               <button 
                 onClick={() => setShowWelcomeModal(false)}
                 className="absolute top-4 right-4 z-20 bg-black/40 text-white p-2 hover:bg-black transition-colors rounded-full backdrop-blur-sm"
               >
                 <X className="w-5 h-5" />
               </button>
-
-              {/* Image Section - Full Visible */}
               <div className="w-full bg-zinc-100 flex items-center justify-center">
                 <img 
                   src="/chamadas-2026/chamada2.png" 
@@ -1040,8 +947,6 @@ export default function App() {
                   className="w-full h-auto animate__animated animate__fadeIn"
                 />
               </div>
-
-              {/* Content Section - Extremely Compacted for Mobile */}
               <div className="p-4 md:p-6 text-center bg-white border-t border-zinc-100 relative">
                 <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.4em] text-brand-primary block mb-2">SAVE THE DATE</span>
                 <h3 className="text-lg md:text-2xl font-black uppercase tracking-tighter leading-tight mb-2">
@@ -1055,7 +960,6 @@ export default function App() {
                     Local: SEST/SENAT
                   </p>
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <a 
                     href="https://docs.google.com/forms/d/e/1FAIpQLSfhoT0GMDIID_gwPE3Q1HLTE4UmyDaA48F2gIufihMvBQ1oDA/viewform?pli=1"
@@ -1068,8 +972,6 @@ export default function App() {
                   </a>
                 </div>
               </div>
-
-              {/* Progress Bar Sutil */}
               <motion.div 
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}

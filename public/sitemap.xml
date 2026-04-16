@@ -1,13 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-  <!-- Main Page -->
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
   <url>
     <loc>https://codigosdorei.com.br/</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-04-16</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://codigosdorei.com.br/logo.jpeg</image:loc>
+      <image:title>Logo Códigos do Rei</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://codigosdorei.com.br/chamadas-2026/chamada2.png</image:loc>
+      <image:title>ECC2026 - 2º Encontro de Cultura Cristã</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://codigosdorei.com.br/projetos/encontro-cultura-crista.jpeg</image:loc>
+      <image:title>Encontro de Cultura Cristã</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://codigosdorei.com.br/projetos/roda-cultural-kids.jpeg</image:loc>
+      <image:title>Roda Cultural Kids</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://codigosdorei.com.br/projetos/zakar-jogo.jpeg</image:loc>
+      <image:title>Zakar Jogo da Memória Bíblico</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://codigosdorei.com.br/capas-revista/edicao4.jpeg</image:loc>
+      <image:title>Revista Cultura Cristã Edição 04</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://codigosdorei.com.br/capas-revista/edicao3.jpeg</image:loc>
+      <image:title>Revista Cultura Cristã Edição 03</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://codigosdorei.com.br/capas-revista/edicao2.jpeg</image:loc>
+      <image:title>Revista Cultura Cristã Edição 02</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://codigosdorei.com.br/capas-revista/edicao1.jpeg</image:loc>
+      <image:title>Revista Cultura Cristã Edição 01</image:title>
+    </image:image>
   </url>
+
 </urlset>

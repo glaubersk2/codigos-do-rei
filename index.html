@@ -3,68 +3,168 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- SEO Meta Tags -->
-    <title>Códigos do Rei | Transformando culturas através da fé e da educação</title>
-    <meta name="description" content="Portal oficial do Códigos do Rei em São Gonçalo. Iniciativa dedicada à transformação cultural através da fé e educação, promovendo a cultura cristã na sociedade através de literatura digital e projetos sociais." />
-    <meta name="keywords" content="Códigos do Rei, cultura cristã, São Gonçalo, evangelismo, educação cristã, projetos sociais, transformação cultural, fé em Deus, revista digital cristã, roda cultural kids" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v19/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2" type="font/woff2" crossorigin />
+
+    <title>Códigos do Rei | Fé, Educação e Cultura Cristã em São Gonçalo</title>
+    <meta name="description" content="Iniciativa focada na transformação social de São Gonçalo através da cultura cristã, literatura digital e projetos educativos. Conheça e apoie nossa causa!" />
+    <meta name="keywords" content="Códigos do Rei, cultura cristã, São Gonçalo, evangelismo, educação cristã, projetos sociais, transformação cultural, fé em Deus, revista digital cristã, roda cultural kids, encontro de cultura cristã" />
     <meta name="author" content="Códigos do Rei" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://codigosdorei.com.br/" />
     <meta name="theme-color" content="#D34117" />
+    <meta name="geo.region" content="BR-RJ" />
+    <meta name="geo.placename" content="São Gonçalo" />
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://codigosdorei.com.br/" />
-    <meta property="og:title" content="Códigos do Rei | Transformando Cultura através da Fé e Educação" />
-    <meta property="og:description" content="Portal oficial do Códigos do Rei. Fé, Educação e Transformação Cultural em São Gonçalo. Conheça nossa revista digital e projetos sociais." />
+    <meta property="og:title" content="Códigos do Rei | Fé, Educação e Cultura Cristã em São Gonçalo" />
+    <meta property="og:description" content="Transformação social através da cultura cristã em São Gonçalo. Literatura digital, projetos educativos e conexão comunitária." />
     <meta property="og:image" content="https://codigosdorei.com.br/logo.jpeg" />
+    <meta property="og:image:width" content="800" />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:alt" content="Logo do projeto Códigos do Rei" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content="Códigos do Rei" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://codigosdorei.com.br/" />
-    <meta property="twitter:title" content="Códigos do Rei | Transformando Cultura" />
-    <meta property="twitter:description" content="Iniciativa voltada para a promoção da cultura cristã e educação em São Gonçalo através de projetos inovadores." />
-    <meta property="twitter:image" content="https://codigosdorei.com.br/logo.jpeg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://codigosdorei.com.br/" />
+    <meta name="twitter:title" content="Códigos do Rei | Fé, Educação e Cultura Cristã" />
+    <meta name="twitter:description" content="Transformação social através da cultura cristã em São Gonçalo. Literatura digital e projetos educativos." />
+    <meta name="twitter:image" content="https://codigosdorei.com.br/logo.jpeg" />
+    <meta name="twitter:image:alt" content="Logo do projeto Códigos do Rei" />
 
-    <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "NGO",
-      "name": "Códigos do Rei",
-      "url": "https://codigosdorei.com.br/",
-      "logo": "https://codigosdorei.com.br/logo.jpeg",
-      "description": "Iniciativa dedicada à transformação cultural através da fé e educação em São Gonçalo.",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "São Gonçalo",
-        "addressRegion": "RJ",
-        "addressCountry": "BR"
-      },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+55-21-96594-3516",
-        "contactType": "customer service"
-      },
-      "sameAs": [
-        "https://www.instagram.com/codigosdorei"
+      "@graph": [
+        {
+          "@type": "NGO",
+          "@id": "https://codigosdorei.com.br/#organization",
+          "name": "Códigos do Rei",
+          "url": "https://codigosdorei.com.br/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://codigosdorei.com.br/logo.jpeg",
+            "width": 800,
+            "height": 800
+          },
+          "description": "Iniciativa dedicada à transformação cultural através da fé e educação em São Gonçalo, RJ.",
+          "foundingDate": "2020",
+          "areaServed": {
+            "@type": "City",
+            "name": "São Gonçalo",
+            "containedInPlace": {
+              "@type": "State",
+              "name": "Rio de Janeiro"
+            }
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "São Gonçalo",
+            "addressRegion": "RJ",
+            "addressCountry": "BR"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+55-21-96594-3516",
+            "contactType": "customer service",
+            "availableLanguage": "Portuguese"
+          },
+          "sameAs": [
+            "https://www.instagram.com/codigosdorei"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://codigosdorei.com.br/#website",
+          "url": "https://codigosdorei.com.br/",
+          "name": "Códigos do Rei",
+          "publisher": {
+            "@id": "https://codigosdorei.com.br/#organization"
+          },
+          "inLanguage": "pt-BR"
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://codigosdorei.com.br/#webpage",
+          "url": "https://codigosdorei.com.br/",
+          "name": "Códigos do Rei | Fé, Educação e Cultura Cristã em São Gonçalo",
+          "isPartOf": {
+            "@id": "https://codigosdorei.com.br/#website"
+          },
+          "about": {
+            "@id": "https://codigosdorei.com.br/#organization"
+          },
+          "description": "Iniciativa focada na transformação social de São Gonçalo através da cultura cristã, literatura digital e projetos educativos.",
+          "inLanguage": "pt-BR"
+        },
+        {
+          "@type": "Event",
+          "@id": "https://codigosdorei.com.br/#ecc2026",
+          "name": "ECC2026 - 2º Encontro de Cultura Cristã",
+          "startDate": "2026-06-20T09:00:00-03:00",
+          "endDate": "2026-06-20T17:00:00-03:00",
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "location": {
+            "@type": "Place",
+            "name": "SEST/SENAT São Gonçalo",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "São Gonçalo",
+              "addressRegion": "RJ",
+              "addressCountry": "BR"
+            }
+          },
+          "image": "https://codigosdorei.com.br/chamadas-2026/chamada2.png",
+          "description": "Um ambiente de fomento, capacitação e conexão cultural, formando pessoas e potencializando talentos através da arte como expressão de fé.",
+          "organizer": {
+            "@id": "https://codigosdorei.com.br/#organization"
+          },
+          "performer": {
+            "@id": "https://codigosdorei.com.br/#organization"
+          }
+        }
       ]
     }
     </script>
 
-    
-    <!-- Animate.css -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="/logo.jpeg" />
+    <link rel="apple-touch-icon" href="/logo.jpeg" />
+    <meta name="application-name" content="Códigos do Rei" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Códigos do Rei" />
+    <meta name="format-detection" content="telephone=no" />
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="padding: 2rem; text-align: center; font-family: sans-serif;">
+        <h1>Códigos do Rei</h1>
+        <p>Transformando culturas através da fé e da educação em São Gonçalo, RJ.</p>
+        <p>Cooperamos com a transformação sociocultural, promovendo uma cultura cristã relevante e atuante no meio da sociedade.</p>
+        <h2>Nossos Projetos</h2>
+        <ul>
+          <li>Encontro de Cultura Cristã - Ambiente de fomento, capacitação e conexão cultural</li>
+          <li>Roda Cultural Kids - Acesso à cultura, fé e alegria para crianças</li>
+          <li>Zakar – Jogo da Memória - Aprendizado lúdico com princípios bíblicos</li>
+        </ul>
+        <h2>Revistas Digitais</h2>
+        <p>Cultura com base em princípios bíblicos - 4 edições disponíveis para download</p>
+        <h2>Próximo Evento: ECC2026</h2>
+        <p>2º Encontro de Cultura Cristã - 20 de Junho de 2026 às 09:00 - SEST/SENAT São Gonçalo</p>
+        <h2>Contato</h2>
+        <p>WhatsApp: (21) 96594-3516 | Email: codigosdorei@gmail.com | Instagram: @codigosdorei</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

@@ -199,10 +199,10 @@ export const CONTENT = {
     instagram: "@codigosdorei"
   },
   brand: {
-    logo: "https://ais-dev-wigmt4l6wdk5aftewv3n2a-108257809999.us-east1.run.app/logo.png", // Placeholder for the provided logo
+    logo: "https://ais-dev-wigmt4l6wdk5aftewv3n2a-108257809999.us-east1.run.app/logo.png",
     colors: {
-      primary: "#D34117", // Deep orange from logo
-      secondary: "#F27D26", // Lighter orange from logo
+      primary: "#D34117",
+      secondary: "#F27D26",
       gradient: "linear-gradient(135deg, #D34117 0%, #F27D26 100%)"
     }
   }
