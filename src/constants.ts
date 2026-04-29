@@ -191,7 +191,8 @@ export const CONTENT = {
     "Rhema Colubande",
     "Açaí da tia Tati",
     "RD CAR - Martelinho de Ouro",
-    "Rocha Ar Condicionado"
+    "Rocha Ar Condicionado",
+    "AMD Alves"
   ],
   contact: {
     whatsapp: "(21) 96594-3516",
