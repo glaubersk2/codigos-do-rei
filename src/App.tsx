@@ -287,10 +287,14 @@ export default function App() {
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const homeScrollPos = React.useRef(0);
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowWelcomeModal(true);
-    }, 1200);
-    return () => clearTimeout(timer);
+    const hasSeenModal = localStorage.getItem('hasSeenWelcomeModal');
+    if (!hasSeenModal) {
+      const timer = setTimeout(() => {
+        setShowWelcomeModal(true);
+        localStorage.setItem('hasSeenWelcomeModal', 'true');
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
   }, []);
   const navigateTo = (newView: 'home' | 'downloads' | 'kids' | 'encontro') => {
     if (view === 'home') {
@@ -887,7 +891,7 @@ export default function App() {
                 </li>
                 <li className="flex items-center gap-3 text-zinc-600">
                   <MapPin className="w-4 h-4" />
-                  <span className="text-sm font-bold uppercase tracking-wider">São Gonçalo, RJ</span>
+                  <span className="text-sm font-bold uppercase tracking-wider">{CONTENT.contact.address}</span>
                 </li>
               </ul>
             </div>

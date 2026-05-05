@@ -197,7 +197,8 @@ export const CONTENT = {
   contact: {
     whatsapp: "(21) 96594-3516",
     email: "codigosdorei@gmail.com",
-    instagram: "@codigosdorei"
+    instagram: "@codigosdorei",
+    address: "R. Maestro Felício Tolêdo, 495 - Sala 815 - Centro, Niterói - RJ, 24030-105"
   },
   brand: {
     logo: "https://ais-dev-wigmt4l6wdk5aftewv3n2a-108257809999.us-east1.run.app/logo.png",
