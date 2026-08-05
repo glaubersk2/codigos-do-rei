@@ -1,0 +1,30 @@
+LANDING PAGE PREMIUM — ZAKAR
+
+ARQUIVO PRINCIPAL
+- index.html
+
+IMAGENS
+- pasta assets/
+
+COMO LIGAR AO CHECKOUT DA HOTMART
+1. Abra o arquivo index.html em um editor de texto.
+2. Procure por: const ZAKAR_CONFIG
+3. Cole o link do checkout da Hotmart entre as aspas de checkoutUrl.
+
+Exemplo:
+checkoutUrl: "https://pay.hotmart.com/SEU-CODIGO",
+
+Enquanto checkoutUrl estiver vazio, os botões de compra direcionam para o WhatsApp (21) 96594-3516.
+
+RECURSOS JÁ PREPARADOS
+- Página responsiva e otimizada para celular.
+- Botão fixo de compra após o visitante sair da primeira dobra.
+- Reaproveitamento automático de parâmetros UTM.
+- Eventos de clique enviados ao dataLayer para futura configuração do Google Tag Manager.
+- SEO básico, Open Graph, dados estruturados de produto e FAQ.
+- Imagens em WebP para carregamento mais rápido.
+- Estrutura sem depoimentos ou urgência artificial.
+
+PUBLICAÇÃO
+- Envie a pasta completa para sua hospedagem, mantendo a pasta assets ao lado do index.html.
+- Também é possível reconstruir a página por blocos no Hotmart Pages, usando este arquivo como referência visual e textual.
