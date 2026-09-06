@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Zakar | Painel Administrativo</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#250d3a" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --purple-950: #250d3a;
+      --purple-900: #32104d;
+      --purple-800: #451568;
+      --purple-700: #5d2089;
+      --purple-600: #7734a8;
+      --yellow: #ffc53d;
+      --orange: #f47a2a;
+      --green: #4fae36;
+      --green-dark: #15803d;
+      --blue: #1b9ed8;
+      --red: #ef4545;
+      --ink: #20152b;
+      --muted: #6d6275;
+      --line: rgba(57, 21, 82, 0.10);
+      --cream: #fff9ee;
+      --paper: #f9f8fc;
+      --white: #ffffff;
+      --shadow-sm: 0 4px 16px rgba(41, 16, 58, 0.06);
+      --shadow-md: 0 12px 36px rgba(41, 16, 58, 0.10);
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --max: 1320px;
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0;
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    .site-header {
+      background: var(--purple-950);
+      color: #fff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      height: 68px;
+      width: min(var(--max), calc(100% - 40px));
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 1.45rem;
+    }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, var(--yellow), #ff9f1f);
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+    }
+    .admin-badge {
+      background: rgba(255, 255, 255, 0.16);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #ffd86b;
+      margin-left: 8px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-action {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-action:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+    .btn-action.logout:hover {
+      background: var(--red);
+      border-color: var(--red);
+    }
+
+    main {
+      flex: 1;
+      padding: 36px 20px 60px;
+    }
+    .container {
+      width: min(var(--max), calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    /* LOGIN SCREEN */
+    .login-wrapper {
+      min-height: calc(100vh - 160px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      background: #ffffff;
+      border: 1.5px solid rgba(57, 21, 82, 0.10);
+      border-radius: var(--radius-lg);
+      padding: 38px 32px;
+      box-shadow: var(--shadow-md);
+      text-align: center;
+    }
+    .login-card h2 {
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--purple-950);
+      margin: 0 0 6px;
+    }
+    .login-card p {
+      color: var(--muted);
+      margin: 0 0 24px;
+      font-size: 0.9rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      font-weight: 750;
+      font-size: 0.86rem;
+      color: #3b2c47;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid rgba(57, 21, 82, 0.16);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .form-group input:focus {
+      border-color: var(--purple-700);
+      box-shadow: 0 0 0 3px rgba(93, 32, 137, 0.12);
+    }
+    .btn-login-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--purple-800), var(--purple-600));
+      color: #fff;
+      border: 0;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 10px 24px rgba(75, 22, 122, 0.22);
+      transition: all 0.2s ease;
+    }
+    .btn-login-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(75, 22, 122, 0.28);
+    }
+
+    /* KPI STATS */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .kpi-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .kpi-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 1.4rem;
+      background: #f4ecfb;
+      flex: 0 0 auto;
+    }
+    .kpi-info small {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .kpi-info strong {
+      font-size: 1.55rem;
+      color: var(--purple-950);
+      font-weight: 900;
+      line-height: 1.15;
+    }
+
+    /* CONTROLS (SEARCH & FILTERS) */
+    .table-controls {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-sm);
+    }
+    .search-box {
+      flex: 1;
+      min-width: 260px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #faf6fd;
+      border: 1px solid rgba(57, 21, 82, 0.12);
+      border-radius: 999px;
+      padding: 8px 16px;
+    }
+    .search-box input {
+      border: 0;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .filter-group select {
+      padding: 8px 14px;
+      border: 1px solid rgba(57, 21, 82, 0.14);
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--purple-950);
+      background: #ffffff;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* TABLE */
+    .table-container {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+    th {
+      background: #f8f4fc;
+      color: var(--purple-950);
+      font-weight: 850;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+    }
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(57, 21, 82, 0.06);
+      vertical-align: middle;
+    }
+    tr:hover td {
+      background: #fdfbfe;
+    }
+
+    .client-cell {
+      min-width: 200px;
+    }
+    .client-cell strong {
+      display: block;
+      color: var(--purple-950);
+      font-weight: 800;
+      font-size: 0.92rem;
+    }
+    .client-cell small {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+    .client-phone-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 5px;
+      flex-wrap: wrap;
+    }
+    .client-phone {
+      font-size: 0.76rem;
+      font-weight: 750;
+      color: #3f2f4c;
+      background: #f4ecfb;
+      padding: 2px 7px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-whatsapp-admin {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #25d366;
+      color: #ffffff !important;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 850;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(37, 211, 102, 0.28);
+      transition: all 0.2s ease;
+    }
+    .btn-whatsapp-admin:hover {
+      background: #1ebc59;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(37, 211, 102, 0.38);
+    }
+    .product-cell {
+      min-width: 170px;
+    }
+    .product-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .product-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: #f4ecfb;
+      display: grid;
+      place-items: center;
+      font-size: 1.05rem;
+      flex: 0 0 auto;
+    }
+    .product-tag strong {
+      display: block;
+      color: var(--purple-950);
+      font-weight: 800;
+      font-size: 0.88rem;
+      line-height: 1.25;
+    }
+
+    .address-cell {
+      max-width: 220px;
+      font-size: 0.82rem;
+      color: #4b3d56;
+      line-height: 1.35;
+    }
+
+    select.select-status {
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1.5px solid rgba(57, 21, 82, 0.16);
+      font-size: 0.82rem;
+      font-weight: 750;
+      background: #ffffff;
+      cursor: pointer;
+      outline: none;
+    }
+    select.select-status:focus {
+      border-color: var(--purple-700);
+    }
+
+    input.input-rastreio {
+      padding: 7px 10px;
+      border: 1.5px solid rgba(57, 21, 82, 0.16);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      width: 130px;
+      outline: none;
+    }
+    input.input-rastreio:focus {
+      border-color: var(--purple-700);
+    }
+
+    .btn-salvar {
+      background: var(--purple-700);
+      color: #fff;
+      border: 0;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-salvar:hover {
+      background: var(--purple-800);
+      transform: translateY(-1px);
+    }
+    .btn-salvar.saved {
+      background: var(--green-dark);
+    }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--purple-950);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.88rem;
+      box-shadow: var(--shadow-lg);
+      display: none;
+      z-index: 1000;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    @media (max-width: 768px) {
+      .header-inner { height: 60px; }
+      .brand { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">🦁</span>
+        <span>ZAKAR</span>
+        <span class="admin-badge">Admin</span>
+      </div>
+
+      <div class="header-actions" id="admin-nav" hidden>
+        <span style="font-size: 0.85rem; font-weight: 700;" id="admin-name">Admin</span>
+        <button type="button" class="btn-action" id="btn-atualizar-topo">🔄 Atualizar</button>
+        <button type="button" class="btn-action logout" id="btn-admin-sair">Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <!-- LOGIN VIEW -->
+      <section id="admin-login" class="login-wrapper">
+        <div class="login-card">
+          <h2>Acesso Restrito</h2>
+          <p>Informe suas credenciais de administrador da ONG.</p>
+
+          <form id="form-admin-login">
+            <div class="form-group">
+              <label for="admin-email">E-mail do Administrador</label>
+              <input type="email" id="admin-email" placeholder="admin@ong.org" required autocomplete="email" />
+            </div>
+
+            <div class="form-group">
+              <label for="admin-senha">Senha de Acesso</label>
+              <input type="password" id="admin-senha" placeholder="••••••••" required autocomplete="current-password" />
+            </div>
+
+            <button type="submit" class="btn-login-submit" id="btn-entrar-admin">Entrar no Painel</button>
+          </form>
+
+          <p id="mensagem-login" style="color: var(--red); font-weight: 750; font-size: 0.88rem; margin-top: 14px;"></p>
+        </div>
+      </section>
+
+      <!-- PAINEL VIEW -->
+      <section id="admin-painel" hidden>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon">📦</div>
+            <div class="kpi-info">
+              <small>Total de Pedidos</small>
+              <strong id="kpi-total-pedidos">0</strong>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-info">
+              <small>Faturamento Total</small>
+              <strong id="kpi-faturamento">R$ 0,00</strong>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon">⚙️</div>
+            <div class="kpi-info">
+              <small>Em Produção / Separação</small>
+              <strong id="kpi-em-aberto">0</strong>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon">🚚</div>
+            <div class="kpi-info">
+              <small>Enviados</small>
+              <strong id="kpi-enviados">0</strong>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon">🎁</div>
+            <div class="kpi-info">
+              <small>Entregues</small>
+              <strong id="kpi-entregues">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="table-controls">
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="filtro-busca" placeholder="Buscar por cliente, e-mail, cidade ou #ID..." />
+          </div>
+
+          <div class="filter-group">
+            <label for="filtro-status" style="font-size: 0.84rem; font-weight: 750; color: var(--muted);">Status:</label>
+            <select id="filtro-status">
+              <option value="todos">Todos os Status</option>
+              <option value="pendente">Aguardando Pagamento</option>
+              <option value="pago_em_estoque">Pago — Estoque</option>
+              <option value="pago_em_producao">Pago — Em Produção</option>
+              <option value="pronto_separando">Pronto — Separando</option>
+              <option value="enviado">Enviado</option>
+              <option value="entregue">Entregue</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>#ID</th>
+                <th>Cliente</th>
+                <th>Item / Produto</th>
+                <th>Endereço de Entrega</th>
+                <th>Qtd</th>
+                <th>Total</th>
+                <th>Status Atual</th>
+                <th>Previsão</th>
+                <th>Rastreio (Correios)</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpo-tabela">
+              <tr>
+                <td colspan="10" style="text-align: center; padding: 40px; color: var(--muted);">Carregando pedidos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p id="mensagem-painel" style="color: var(--red); font-weight: 750; font-size: 0.88rem; margin-top: 14px; text-align: center;"></p>
+      </section>
+
+    </div>
+  </main>
+
+  <div class="toast-msg" id="toast">Alteração salva com sucesso!</div>
+
+  <script>
+    const WORKER_URL = "https://loja-jogos-checkout.sistemas-glauber.workers.dev";
+
+    const opcoesStatus = [
+      { id: "pendente", label: "Aguardando Pagamento" },
+      { id: "pago_em_estoque", label: "Pago — Estoque" },
+      { id: "pago_em_producao", label: "Pago — Em Produção" },
+      { id: "pronto_separando", label: "Pronto — Separando" },
+      { id: "enviado", label: "Enviado" },
+      { id: "entregue", label: "Entregue" },
+      { id: "cancelado", label: "Cancelado" },
+    ];
+
+    let todosPedidos = [];
+
+    function token() {
+      return localStorage.getItem("token_admin");
+    }
+
+    function formatarReais(centavos) {
+      return (centavos / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      setTimeout(() => { t.style.display = "none"; }, 2500);
+    }
+
+    // LOGIN
+    document.getElementById("form-admin-login").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("admin-email").value.trim();
+      const senha = document.getElementById("admin-senha").value;
+      const msg = document.getElementById("mensagem-login");
+      const btn = document.getElementById("btn-entrar-admin");
+      msg.textContent = "";
+
+      btn.disabled = true;
+      btn.textContent = "Autenticando...";
+
+      try {
+        const resp = await fetch(`${WORKER_URL}/admin/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha }),
+        });
+        const dados = await resp.json();
+        if (!resp.ok) throw new Error(dados.erro || "Credenciais inválidas.");
+
+        localStorage.setItem("token_admin", dados.token);
+        localStorage.setItem("nome_admin", dados.nome || "Admin");
+        exibirPainel();
+      } catch (erro) {
+        msg.textContent = erro.message;
+        btn.disabled = false;
+        btn.textContent = "Entrar no Painel";
+      }
+    });
+
+    function exibirPainel() {
+      const loginSec = document.getElementById("admin-login");
+      const painelSec = document.getElementById("admin-painel");
+      const navSec = document.getElementById("admin-nav");
+
+      loginSec.hidden = true;
+      loginSec.style.display = "none";
+      painelSec.hidden = false;
+      painelSec.style.display = "block";
+      navSec.hidden = false;
+      document.getElementById("admin-name").textContent = localStorage.getItem("nome_admin") || "Admin";
+      carregarPedidos();
+    }
+
+    async function carregarPedidos() {
+      const msg = document.getElementById("mensagem-painel");
+      msg.textContent = "";
+
+      try {
+        const resp = await fetch(`${WORKER_URL}/admin/pedidos`, {
+          headers: { Authorization: `Bearer ${token()}` },
+        });
+
+        if (resp.status === 401) {
+          localStorage.removeItem("token_admin");
+          location.reload();
+          return;
+        }
+
+        const dados = await resp.json();
+        if (!resp.ok) throw new Error(dados.erro || "Erro ao consultar pedidos.");
+
+        todosPedidos = dados.pedidos || [];
+        atualizarKPIs(todosPedidos);
+        renderizarTabela();
+      } catch (erro) {
+        msg.textContent = erro.message;
+      }
+    }
+
+    function atualizarKPIs(pedidos) {
+      document.getElementById("kpi-total-pedidos").textContent = pedidos.length;
+
+      const faturamentoTotal = pedidos
+        .filter(p => p.status !== "cancelado" && p.status !== "pendente")
+        .reduce((acc, p) => acc + (p.total_centavos || 0), 0);
+      document.getElementById("kpi-faturamento").textContent = formatarReais(faturamentoTotal);
+
+      const emAberto = pedidos.filter(p => ["pago_em_estoque", "pago_em_producao", "pronto_separando"].includes(p.status)).length;
+      document.getElementById("kpi-em-aberto").textContent = emAberto;
+
+      const enviados = pedidos.filter(p => p.status === "enviado").length;
+      document.getElementById("kpi-enviados").textContent = enviados;
+
+      const entregues = pedidos.filter(p => p.status === "entregue").length;
+      document.getElementById("kpi-entregues").textContent = entregues;
+    }
+
+    function renderizarTabela() {
+      const termo = document.getElementById("filtro-busca").value.toLowerCase().trim();
+      const statusFiltro = document.getElementById("filtro-status").value;
+
+      const filtrados = todosPedidos.filter(p => {
+        const telBusca = p.telefone_comprador || p.telefone || p.comprador_telefone || p.celular || "";
+        const prodBusca = p.produto_nome || p.nome_produto || p.item_nome || "Jogo Bíblico Zakar";
+        const matchStatus = statusFiltro === "todos" || p.status === statusFiltro;
+        const textoBusca = `${p.id} ${p.nome_comprador} ${p.email_comprador} ${telBusca} ${prodBusca} ${p.endereco_cidade} ${p.endereco_rua}`.toLowerCase();
+        const matchTermo = !termo || textoBusca.includes(termo);
+        return matchStatus && matchTermo;
+      });
+
+      const tbody = document.getElementById("corpo-tabela");
+
+      if (filtrados.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="10" style="text-align: center; padding: 40px; color: var(--muted);">Nenhum pedido encontrado com os filtros selecionados.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtrados.map(p => {
+        const telRaw = p.telefone_comprador || p.telefone || p.comprador_telefone || p.celular || "";
+        const phoneDigits = String(telRaw).replace(/\D/g, "");
+        let telHtml = "";
+
+        if (phoneDigits.length >= 8) {
+          let telFormatado = telRaw;
+          if (phoneDigits.length === 11) {
+            telFormatado = `(${phoneDigits.slice(0, 2)}) ${phoneDigits.slice(2, 7)}-${phoneDigits.slice(7)}`;
+          } else if (phoneDigits.length === 10) {
+            telFormatado = `(${phoneDigits.slice(0, 2)}) ${phoneDigits.slice(2, 6)}-${phoneDigits.slice(6)}`;
+          }
+
+          const ddiPhone = phoneDigits.startsWith("55") ? phoneDigits : `55${phoneDigits}`;
+          const msgWa = encodeURIComponent(`Olá, ${p.nome_comprador}! Aqui é da equipe Zakar / Códigos do Rei referente ao seu pedido #${p.id}.`);
+          const waUrl = `https://wa.me/${ddiPhone}?text=${msgWa}`;
+
+          telHtml = `
+            <div class="client-phone-wrap">
+              <span class="client-phone">📞 ${telFormatado}</span>
+              <a href="${waUrl}" target="_blank" rel="noopener" class="btn-whatsapp-admin" title="Conversar com ${p.nome_comprador} no WhatsApp">
+                💬 WhatsApp
+              </a>
+            </div>
+          `;
+        } else {
+          telHtml = `<small style="color: #9c8ea6; font-size: 0.74rem; margin-top: 3px;">Telefone não informado</small>`;
+        }
+
+        const nomeItem = p.produto_nome || p.nome_produto || p.item_nome || "Jogo Bíblico Zakar";
+        const freteItem = p.frete_nome ? `Envio: ${p.frete_nome}` : "";
+
+        const endereco = [
+          p.endereco_rua ? `${p.endereco_rua}, ${p.endereco_numero || 's/n'}` : null,
+          p.endereco_complemento,
+          p.endereco_bairro,
+          p.endereco_cidade && p.endereco_estado ? `${p.endereco_cidade} - ${p.endereco_estado}` : null,
+          p.cep ? `CEP: ${p.cep}` : null,
+        ].filter(Boolean).join("<br>");
+
+        const opcoesHtml = opcoesStatus.map(s => `
+          <option value="${s.id}" ${s.id === p.status ? "selected" : ""}>${s.label}</option>
+        `).join("");
+
+        return `
+          <tr>
+            <td><strong>#${p.id}</strong></td>
+            <td class="client-cell">
+              <strong>${p.nome_comprador}</strong>
+              <small>${p.email_comprador}</small>
+              ${telHtml}
+            </td>
+            <td class="product-cell">
+              <div class="product-tag">
+                <span class="product-icon">🎲</span>
+                <div>
+                  <strong>${nomeItem}</strong>
+                  ${freteItem ? `<small style="color: var(--muted); display: block; font-size: 0.75rem;">${freteItem}</small>` : ""}
+                </div>
+              </div>
+            </td>
+            <td class="address-cell">${endereco || "Não informado"}</td>
+            <td><strong>${p.quantidade}</strong></td>
+            <td><strong style="color: var(--purple-800);">${formatarReais(p.total_centavos)}</strong></td>
+            <td>
+              <select data-pedido="${p.id}" class="select-status">${opcoesHtml}</select>
+            </td>
+            <td>${p.data_prevista_pronto ? new Date(p.data_prevista_pronto).toLocaleDateString('pt-BR') : "-"}</td>
+            <td>
+              <input type="text" class="input-rastreio" data-pedido="${p.id}"
+                     value="${p.codigo_rastreio || ""}" placeholder="Ex: BR123456789" />
+            </td>
+            <td>
+              <button type="button" class="btn-salvar" data-pedido="${p.id}" id="btn-save-${p.id}">Salvar</button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".btn-salvar").forEach(btn => {
+        btn.addEventListener("click", () => salvarStatus(btn.dataset.pedido));
+      });
+    }
+
+    async function salvarStatus(pedidoId) {
+      const select = document.querySelector(`.select-status[data-pedido="${pedidoId}"]`);
+      const inputRastreio = document.querySelector(`.input-rastreio[data-pedido="${pedidoId}"]`);
+      const btn = document.getElementById(`btn-save-${pedidoId}`);
+
+      const novoStatus = select.value;
+      const codigoRastreio = inputRastreio.value.trim() || null;
+
+      btn.disabled = true;
+      btn.textContent = "Salvando...";
+
+      try {
+        const resp = await fetch(`${WORKER_URL}/admin/atualizar-status`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token()}` },
+          body: JSON.stringify({
+            pedido_id: Number(pedidoId),
+            novo_status: novoStatus,
+            codigo_rastreio: codigoRastreio,
+          }),
+        });
+
+        const dados = await resp.json();
+        if (!resp.ok) throw new Error(dados.erro || "Erro ao salvar alterações.");
+
+        // Update local object
+        const pedido = todosPedidos.find(p => p.id === Number(pedidoId));
+        if (pedido) {
+          pedido.status = novoStatus;
+          if (codigoRastreio) pedido.codigo_rastreio = codigoRastreio;
+        }
+
+        atualizarKPIs(todosPedidos);
+        showToast(`Pedido #${pedidoId} atualizado com sucesso!`);
+        btn.classList.add("saved");
+        btn.textContent = "✓ Salvo";
+        setTimeout(() => {
+          btn.classList.remove("saved");
+          btn.disabled = false;
+          btn.textContent = "Salvar";
+        }, 1800);
+      } catch (err) {
+        alert(err.message);
+        btn.disabled = false;
+        btn.textContent = "Salvar";
+      }
+    }
+
+    document.getElementById("filtro-busca").addEventListener("input", renderizarTabela);
+    document.getElementById("filtro-status").addEventListener("change", renderizarTabela);
+    document.getElementById("btn-atualizar-topo").addEventListener("click", carregarPedidos);
+
+    document.getElementById("btn-admin-sair").addEventListener("click", () => {
+      localStorage.removeItem("token_admin");
+      localStorage.removeItem("nome_admin");
+      location.reload();
+    });
+
+    if (token()) {
+      exibirPainel();
+    }
+  </script>
+</body>
+</html>

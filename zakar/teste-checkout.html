@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Zakar | Checkout de Teste</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#341054" />
+
+  <style>
+    :root{
+      --purple-950:#250d3a;
+      --purple-900:#32104d;
+      --purple-800:#451568;
+      --purple-700:#5d2089;
+      --purple-600:#7734a8;
+      --yellow:#ffc53d;
+      --orange:#f47a2a;
+      --green:#4fae36;
+      --blue:#1b9ed8;
+      --red:#ef4545;
+      --ink:#20152b;
+      --muted:#6d6275;
+      --line:rgba(57,21,82,.10);
+      --cream:#fff9ee;
+      --cream-2:#fff1d6;
+      --paper:#fffefa;
+      --white:#fff;
+      --success:#1f9d55;
+      --shadow-sm:0 8px 24px rgba(41,16,58,.08);
+      --shadow-md:0 20px 58px rgba(41,16,58,.14);
+      --shadow-lg:0 34px 90px rgba(37,13,58,.20);
+      --radius-sm:16px;
+      --radius-md:24px;
+      --radius-lg:34px;
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      background:var(--paper);
+      color:var(--ink);
+      line-height:1.55;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    img{display:block;max-width:100%;height:auto}
+    a{color:inherit;text-decoration:none}
+    button,a{-webkit-tap-highlight-color:transparent}
+    button{font:inherit}
+    .container{width:min(var(--max),calc(100% - 40px));margin-inline:auto}
+
+    .announcement{background:var(--purple-950);color:#fff;padding:9px 16px;text-align:center;font-size:.84rem;font-weight:700;letter-spacing:.01em}
+    .announcement span{color:#ffd86b}
+
+    .site-header{position:sticky;top:0;z-index:100;background:rgba(255,254,250,.92);border-bottom:1px solid rgba(57,21,82,.08);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+    .header-inner{height:74px;display:flex;align-items:center;justify-content:space-between;gap:26px}
+    .brand{display:inline-flex;align-items:center;gap:11px;font-weight:1000;letter-spacing:-.055em;font-size:1.85rem;line-height:1}
+    .brand-mark{width:38px;height:38px;border-radius:13px;background:linear-gradient(145deg,var(--yellow),#ff9f1f);display:grid;place-items:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 8px 20px rgba(244,122,42,.24);font-size:1.25rem}
+    .brand-word span:nth-child(1){color:#189cdc}.brand-word span:nth-child(2){color:#f6ba20}.brand-word span:nth-child(3){color:#4aa727}.brand-word span:nth-child(4){color:#f17b20}.brand-word span:nth-child(5){color:#ec3535}
+
+    main{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:60px 20px 80px;
+      background:
+        radial-gradient(circle at 15% 20%,rgba(255,197,61,.18),transparent 26%),
+        radial-gradient(circle at 85% 75%,rgba(27,158,216,.12),transparent 28%),
+        linear-gradient(145deg,#fffaf0 0%,#fff1d8 50%,#fffaf1 100%);
+    }
+
+    #comprar{
+      width:100%;
+      max-width:580px;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(57,21,82,.10);
+      border-radius:var(--radius-lg);
+      padding:42px 36px;
+      box-shadow:var(--shadow-lg);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+    }
+
+    #comprar h2{
+      font-size:clamp(1.9rem,3.2vw,2.5rem);
+      line-height:1.1;
+      letter-spacing:-.045em;
+      color:var(--purple-950);
+      margin:0 0 26px;
+      text-align:center;
+      font-weight:900;
+    }
+
+    #comprar form{
+      display:grid;
+      gap:18px;
+    }
+
+    #comprar label{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+      font-weight:700;
+      color:#44374e;
+      font-size:.92rem;
+    }
+
+    #comprar input[type="text"],
+    #comprar input[type="number"],
+    #comprar input[type="email"]{
+      width:100%;
+      padding:14px 16px;
+      border:1.5px solid rgba(57,21,82,.16);
+      border-radius:14px;
+      font-size:1rem;
+      font-family:inherit;
+      color:var(--ink);
+      background:#fff;
+      transition:border-color .2s ease,box-shadow .2s ease;
+      outline:none;
+    }
+
+    #comprar input[type="text"]:focus,
+    #comprar input[type="number"]:focus,
+    #comprar input[type="email"]:focus{
+      border-color:var(--purple-700);
+      box-shadow:0 0 0 3.5px rgba(93,32,137,.14);
+    }
+
+    #comprar button[type="submit"]{
+      width:100%;
+      padding:16px 22px;
+      border:0;
+      border-radius:999px;
+      background:linear-gradient(135deg,var(--purple-800),var(--purple-600));
+      color:#fff;
+      font-weight:900;
+      font-size:1.05rem;
+      cursor:pointer;
+      transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
+      box-shadow:0 12px 28px rgba(75,22,122,.24);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin-top:6px;
+    }
+
+    #comprar button[type="submit"]:hover{
+      transform:translateY(-2px);
+      filter:brightness(1.04);
+      box-shadow:0 16px 32px rgba(75,22,122,.30);
+    }
+
+    #comprar button[type="submit"]:active{
+      transform:translateY(0);
+    }
+
+    #opcoes-frete{
+      margin-top:28px;
+      padding-top:24px;
+      border-top:1px solid var(--line);
+    }
+
+    #opcoes-frete h3{
+      font-size:1.28rem;
+      color:var(--purple-900);
+      margin:0 0 16px;
+      font-weight:850;
+      letter-spacing:-.02em;
+    }
+
+    #lista-frete{
+      display:grid;
+      gap:10px;
+      margin-bottom:24px;
+    }
+
+    #lista-frete label{
+      display:flex !important;
+      flex-direction:row !important;
+      align-items:center !important;
+      gap:12px !important;
+      padding:14px 16px;
+      border:1.5px solid rgba(57,21,82,.12);
+      border-radius:15px;
+      background:#fff;
+      cursor:pointer;
+      transition:border-color .2s ease,background-color .2s ease,box-shadow .2s ease;
+      font-size:.92rem;
+      font-weight:600;
+      color:#372b42;
+    }
+
+    #lista-frete label:hover{
+      border-color:var(--purple-600);
+      background:#faf6fd;
+    }
+
+    #lista-frete label:has(input:checked){
+      border-color:var(--purple-700);
+      background:#f5ebfb;
+      box-shadow:0 6px 18px rgba(93,32,137,.10);
+    }
+
+    #lista-frete input[type="radio"]{
+      accent-color:var(--purple-700);
+      width:18px;
+      height:18px;
+      cursor:pointer;
+      margin:0;
+      flex:0 0 auto;
+    }
+
+    #form-comprador p{
+      font-size:1.15rem;
+      font-weight:700;
+      color:var(--purple-950);
+      margin:18px 0 14px;
+      padding:14px 18px;
+      background:var(--cream);
+      border-radius:14px;
+      border:1px solid rgba(255,197,61,.35);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    #total-exibido{
+      color:var(--purple-800);
+      font-size:1.35rem;
+      font-weight:1000;
+    }
+
+    #mensagem-erro{
+      margin:18px 0 0;
+      font-weight:700;
+      text-align:center;
+      font-size:.92rem;
+    }
+
+    footer{
+      background:#1c0a29;
+      color:#cbbdd2;
+      padding:34px 0;
+      font-size:.88rem;
+    }
+    .footer-inner{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:22px;
+      flex-wrap:wrap;
+    }
+    .footer-inner strong{color:#fff}
+    .footer-links{display:flex;gap:18px;flex-wrap:wrap}
+    .footer-links a:hover{color:#fff}
+
+    @media(max-width:640px){
+      main{padding:40px 16px 60px}
+      #comprar{padding:28px 20px;border-radius:var(--radius-md)}
+      .header-inner{height:64px}
+      .brand{font-size:1.62rem}
+      .brand-mark{width:34px;height:34px}
+    }
+  </style>
+</head>
+<body>
+  <div class="announcement">Mais do que um jogo: <span>uma experiência de fé, aprendizado e conexão.</span></div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/zakar/" aria-label="Zakar, início">
+        <span class="brand-mark" aria-hidden="true">🦁</span>
+        <span class="brand-word"><span>Z</span><span>A</span><span>K</span><span>A</span><span>R</span></span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section id="comprar">
+  <h2>Comprar jogos</h2>
+
+  <form id="form-frete">
+    <label>
+      CEP para entrega
+      <input type="text" id="cep" placeholder="00000-000" required maxlength="9" />
+    </label>
+
+    <label>
+      Quantidade de jogos
+      <input type="number" id="quantidade" min="1" max="50" value="1" required />
+    </label>
+
+    <button type="submit">Calcular frete</button>
+  </form>
+
+  <div id="opcoes-frete" hidden>
+    <h3>Escolha o frete</h3>
+    <div id="lista-frete"></div>
+
+    <form id="form-comprador">
+      <label>
+        Nome completo
+        <input type="text" id="nome" required />
+      </label>
+      <label>
+        E-mail
+        <input type="email" id="email" required />
+      </label>
+
+      <p>Total: <strong id="total-exibido"></strong></p>
+
+      <button type="submit">Ir para pagamento</button>
+    </form>
+  </div>
+
+  <p id="mensagem-erro" style="color: red"></p>
+</section>
+
+<script>
+  const WORKER_URL = "https://loja-jogos-checkout.sistemas-glauber.workers.dev";
+
+  const formFrete = document.getElementById("form-frete");
+  const formComprador = document.getElementById("form-comprador");
+  const opcoesFreteDiv = document.getElementById("opcoes-frete");
+  const listaFreteDiv = document.getElementById("lista-frete");
+  const totalExibido = document.getElementById("total-exibido");
+  const mensagemErro = document.getElementById("mensagem-erro");
+
+  let freteSelecionadoId = null;
+  let ultimoCep = null;
+  let ultimaQuantidade = null;
+
+  function formatarReais(centavos) {
+    return (centavos / 100).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+  }
+
+  formFrete.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    mensagemErro.textContent = "";
+
+    const cep = document.getElementById("cep").value;
+    const quantidade = Number(document.getElementById("quantidade").value);
+
+    try {
+      const resposta = await fetch(`${WORKER_URL}/calcular`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cep, quantidade }),
+      });
+
+      const dados = await resposta.json();
+      if (!resposta.ok) throw new Error(dados.erro || "Erro ao calcular frete.");
+
+      ultimoCep = cep;
+      ultimaQuantidade = quantidade;
+
+      listaFreteDiv.innerHTML = "";
+      const opcoes = dados.fretes || dados.opcoes_frete || [];
+      opcoes.forEach((opcao) => {
+        const valCentavos = opcao.valor_centavos !== undefined ? opcao.valor_centavos : (opcao.preco_centavos !== undefined ? opcao.preco_centavos : 0);
+        const subtotal = dados.subtotal_centavos || 3490;
+        const total = opcao.total_centavos || (subtotal + valCentavos);
+        const label = document.createElement("label");
+        label.style.display = "block";
+        label.innerHTML = `
+          <input type="radio" name="frete" value="${opcao.id}" />
+          ${opcao.nome} — ${formatarReais(valCentavos)}
+          (${opcao.prazo_dias} dias úteis) — total ${formatarReais(total)}
+        `;
+        label.querySelector("input").addEventListener("change", () => {
+          freteSelecionadoId = opcao.id;
+          totalExibido.textContent = formatarReais(total);
+        });
+        listaFreteDiv.appendChild(label);
+      });
+
+      opcoesFreteDiv.hidden = false;
+    } catch (erro) {
+      mensagemErro.textContent = erro.message;
+    }
+  });
+
+  formComprador.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    mensagemErro.textContent = "";
+
+    if (!freteSelecionadoId) {
+      mensagemErro.textContent = "Escolha uma opção de frete.";
+      return;
+    }
+
+    const nome = document.getElementById("nome").value;
+    const email = document.getElementById("email").value;
+
+    try {
+      const resposta = await fetch(`${WORKER_URL}/criar-pagamento`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cep: ultimoCep,
+          quantidade: ultimaQuantidade,
+          frete_escolhido: freteSelecionadoId,
+          comprador: { nome, email },
+        }),
+      });
+
+      const dados = await resposta.json();
+      if (!resposta.ok) throw new Error(dados.erro || "Erro ao criar pagamento.");
+
+      // Manda o cliente pra página de pagamento hospedada pelo PagBank
+      window.location.href = dados.checkout_url;
+    } catch (erro) {
+      mensagemErro.textContent = erro.message;
+    }
+  });
+</script>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div><strong>Associação Códigos do Rei</strong><br />Transformando vidas através da cultura.</div>
+      <div class="footer-links"><a href="https://instagram.com/codigosdorei" target="_blank" rel="noopener">@codigosdorei</a><a href="https://wa.me/5521965943516" target="_blank" rel="noopener">WhatsApp: (21) 96594-3516</a></div>
+    </div>
+  </footer>
+</body>
+</html>
